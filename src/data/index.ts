@@ -1,0 +1,15 @@
+export const plansData = [
+  { type: "chapters", target: 10, progress: 7 },
+  { type: "pages", target: 50, progress: 35 },
+  { type: "chapters", target: 12, progress: 8 },
+  { type: "pages", target: 40, progress: 25 },
+  { type: "chapters", target: 15, progress: 10 },
+  { type: "pages", target: 100, progress: 85 },
+  { type: "chapters", target: 20, progress: 16 },
+  { type: "pages", target: 60, progress: 45 },
+  { type: "chapters", target: 8, progress: 4 },
+  { type: "pages", target: 30, progress: 28 },
+  { type: "chapters", target: 5, progress: 3 },
+  { type: "pages", target: 70, progress: 50 },
+  { type: "chapters", target: 18, progress: 12 },
+];
