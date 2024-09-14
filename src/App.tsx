@@ -9,7 +9,7 @@ import Plans from "./pages/Plans";
 import Plan from "./pages/Plan";
 
 function App() {
-  const [theme] = useState("light");
+  const [theme] = useState("dark");
   // let handleTheme = ()=>{
   //   setTheme(theme === 'dark' ? "light":"dark")
   // }
