@@ -30,12 +30,16 @@ function Plan() {
           <div className='w-28 xs:w-40'>
             <CalendarStatItem
               {...plansData[0]}
-              text={`${
-                Math.round(
-                  (plansData[0].progress / plansData[0].target) * 100
-                ) || 0
-              }%`}
               strokeWidth={10}
+              children={
+                <h1 className='text-3xl font-bold'>
+                  {`${
+                    Math.round(
+                      (plansData[0].progress / plansData[0].target) * 100
+                    ) || 0
+                  }%`}
+                </h1>
+              }
             />
           </div>
         </CardHeader>
