@@ -4,6 +4,10 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        xxs: "300px",
+        xs: "400px",
+      },
       fontFamily: {
         space: ["Space Mono", "system-ui"],
       },

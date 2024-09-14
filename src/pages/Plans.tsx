@@ -1,9 +1,11 @@
+import BackButton from "@/components/BackButton";
 import PlansItem from "@/components/PlansItem";
 import { plansData } from "@/data";
 
 function Plans() {
   return (
     <div>
+      <BackButton />
       <div className='pt-5'>
         <h1 className='text-3xl'>Your Plans</h1>
       </div>

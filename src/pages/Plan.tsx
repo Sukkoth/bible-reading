@@ -12,20 +12,22 @@ import { Button } from "@/components/ui/button";
 import PlanDetailItem from "@/components/PlanDetailItem";
 import { TbCategory } from "react-icons/tb";
 import PlanCalendarView from "@/components/PlanCalendarView";
+import BackButton from "@/components/BackButton";
 
 function Plan() {
   //   const { planId } = useParams();
-  const startDate = new Date("9-10-2024");
+  const startDate = new Date("9-14-2024");
   const endDate = new Date("9-16-2025");
 
   return (
-    <div>
+    <div className=''>
+      <BackButton />
       <div className='pt-5'>
-        <h1 className='text-3xl'>Chronological Bible reading</h1>
+        <h1 className='text-2xl xs:text-3xl'>Chronological Bible reading</h1>
       </div>
       <Card className='flex items-center flex-col mt-10 gap-3'>
         <CardHeader>
-          <div className='w-40'>
+          <div className='w-28 xs:w-40'>
             <CalendarStatItem
               {...plansData[0]}
               text={`${
@@ -38,7 +40,7 @@ function Plan() {
           </div>
         </CardHeader>
         <CardContent className='overflow-hidden'>
-          <div className='grid grid-cols-3 gap-7'>
+          <div className='grid grid-cols-1  xxs:grid-cols-2 xs:grid-cols-3 gap-2'>
             {planDetail.map((detail) => (
               <PlanDetailItem {...detail} key={detail.header} />
             ))}
@@ -47,7 +49,8 @@ function Plan() {
 
           <PlanCalendarView startDate={startDate} endDate={endDate} />
           <Separator className='my-5' />
-          <div>
+
+          <div className='w-full'>
             <Button variant='destructive' size='lg' className='w-full'>
               Delete Plan
             </Button>

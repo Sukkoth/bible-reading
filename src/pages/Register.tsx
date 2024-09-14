@@ -11,18 +11,21 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema, LoginSchemaType } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 function Register() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
 
-  const onSubmit: SubmitHandler<LoginSchemaType> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<LoginSchemaType> = (data) => {
+    navigate("/");
+  };
 
   return (
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
@@ -81,10 +84,10 @@ function Register() {
         </CardHeader>
         <CardContent>
           <div className='space-y-5'>
-            <Button variant={"outline"} className='w-full'>
+            <Button variant={"outline"} className='w-full' size='lg'>
               <GitHubLogoIcon className='mr-2 h-4 w-4' /> Github
             </Button>
-            <Button variant={"outline"} className='w-full'>
+            <Button variant={"outline"} className='w-full' size='lg'>
               <FcGoogle className='mr-2 h-4 w-4' /> Google
             </Button>
           </div>
