@@ -7,6 +7,7 @@ import MainLayout from "./components/Layouts/MainLayout";
 import Home from "./pages/Home";
 import Plans from "./pages/Plans";
 import Plan from "./pages/Plan";
+import NewPlan from "./pages/NewPlan";
 
 function App() {
   const [theme] = useState("dark");
@@ -31,6 +32,7 @@ function App() {
         <Route>
           <Route path='/' element={<Home />} />
           <Route path='/plans' element={<Plans />} />
+          <Route path='/plans/new' element={<NewPlan />} />
           <Route path='/plans/:planId' element={<Plan />} />
         </Route>
       </Route>

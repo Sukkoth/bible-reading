@@ -4,10 +4,11 @@ import { CgAdd } from "react-icons/cg";
 import * as DATE_UTILS from "@/utils/date-utils";
 import CalendarStatItem from "@/components/CalendarStatItem";
 import PlansItem from "@/components/PlansItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { plansData } from "@/data";
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className='pt-5'>
@@ -16,7 +17,11 @@ function Home() {
         <span className='text-xs'>{new Date().toDateString()}</span>
       </div>
       <div className='mt-5 space-y-2'>
-        <Button size='default' className='w-full rounded-3xl py-5'>
+        <Button
+          size='default'
+          className='w-full rounded-3xl py-5'
+          onClick={() => navigate("plans/new")}
+        >
           <CgAdd className='mr-2 h-4 w-4' /> New Plan
         </Button>
         <Button
