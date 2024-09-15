@@ -14,6 +14,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema, LoginSchemaType } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRegister } from "@/react-query/mutations";
 
 function Register() {
   const navigate = useNavigate();
@@ -23,9 +24,13 @@ function Register() {
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
 
+  const handleRegister = useRegister();
+
   const onSubmit: SubmitHandler<LoginSchemaType> = (data) => {
-    navigate("/");
+    handleRegister.mutate(data);
   };
+
+  const registerErrors = handleRegister.error;
 
   return (
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
@@ -37,6 +42,7 @@ function Register() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <p className='text-sm pb-1 text-red-400'>{registerErrors?.message}</p>
           <form
             className='flex items-center justify-center flex-col gap-5'
             onSubmit={handleSubmit(onSubmit)}
@@ -70,8 +76,13 @@ function Register() {
               )}
             </div>
 
-            <Button type='submit' className='w-full' size='lg'>
-              Register
+            <Button
+              type='submit'
+              className='w-full'
+              size='lg'
+              disabled={handleRegister.isPending}
+            >
+              {handleRegister.isPending ? "Registering . . ." : "Register"}
             </Button>
           </form>
         </CardContent>

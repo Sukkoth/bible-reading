@@ -74,14 +74,11 @@ body {
   }
 }
 
-/* .CircularProgressbar-path {
-  @apply stroke-primary transition-all duration-500 !important;
+@keyframes spin-loader {
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-.CircularProgressbar-trail {
-  @apply stroke-secondary !important;
+.spin-loader {
+  animation: spin 3s linear infinite;
 }
-
-.CircularProgressbar-text {
-  @apply fill-foreground !important;
-} */

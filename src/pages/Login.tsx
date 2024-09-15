@@ -14,6 +14,8 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema, LoginSchemaType } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import supabase from "@/supabase";
+import { useLogin } from "@/react-query/mutations";
 
 function Login() {
   const navigate = useNavigate();
@@ -22,10 +24,19 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
+  const handleLoginWithPassword = useLogin();
 
-  const onSubmit: SubmitHandler<LoginSchemaType> = (data) => {
-    navigate("/");
+  const onSubmit: SubmitHandler<LoginSchemaType> = async (data) => {
+    await handleLoginWithPassword.mutateAsync(data);
   };
+
+  async function handleLoginGoogle() {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+  }
+
+  const loginErrors = handleLoginWithPassword.error;
 
   return (
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
@@ -37,6 +48,7 @@ function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <p className='text-sm pb-1 text-red-400'>{loginErrors?.message}</p>
           <form
             className='flex items-center justify-center flex-col gap-5'
             onSubmit={handleSubmit(onSubmit)}
@@ -77,8 +89,15 @@ function Login() {
                 Forgot Password?
               </Link>
             </div>
-            <Button type='submit' className='w-full' size='lg'>
-              Login
+            <Button
+              type='submit'
+              className='w-full'
+              size='lg'
+              disabled={handleLoginWithPassword.isPending}
+            >
+              {handleLoginWithPassword.isPending
+                ? "Logging in . . ."
+                : " Login"}
             </Button>
           </form>
         </CardContent>
@@ -94,7 +113,12 @@ function Login() {
             <Button variant={"outline"} className='w-full' size='lg'>
               <GitHubLogoIcon className='mr-2 h-4 w-4' /> Github
             </Button>
-            <Button variant={"outline"} className='w-full' size='lg'>
+            <Button
+              variant={"outline"}
+              className='w-full'
+              size='lg'
+              onClick={handleLoginGoogle}
+            >
               <FcGoogle className='mr-2 h-4 w-4' /> Google
             </Button>
           </div>
