@@ -6,11 +6,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: LOGOUT,
     onSuccess: () => {
-      navigate("/login");
+      location.pathname = "/login";
     },
   });
 }
@@ -41,11 +40,11 @@ export function useRegister() {
 }
 
 export function useCompleteProfile() {
-  const { user, handleSetProfile } = useAuth();
+  const { user, handleSetProfile, profile } = useAuth();
   const navigate = useNavigate();
   return useMutation({
     mutationFn: (formData: CompleteProfileSchemaType) =>
-      UPDATE_PROFILE(formData, user!.id),
+      UPDATE_PROFILE(formData, user!.id, profile?.id),
     onSuccess(data) {
       handleSetProfile(data);
       navigate("/");

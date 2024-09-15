@@ -51,9 +51,11 @@ async function GET_PROFILE(userId: string): Promise<Profile> {
 
 export async function UPDATE_PROFILE(
   formData: CompleteProfileSchemaType,
-  userId: string
+  userId: string,
+  profileId: number | undefined
 ) {
   const dataToUpdate = {
+    id: profileId || undefined,
     first_name: formData.firstName,
     last_name: formData.lastName!.length > 0 ? formData.lastName : undefined,
     avatar: formData.avatar,

@@ -2,6 +2,7 @@ declare type ScheduleStatus = "PENDING" | "COMPLETE" | "";
 declare type PlanType = "BOOK" | "BIBLE";
 
 declare interface Profile {
+  id: number;
   created_at: string;
   updated_at: string;
   first_name: string;
