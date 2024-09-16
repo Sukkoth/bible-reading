@@ -14,6 +14,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useTheme } from "@/Providers/ThemeProvider";
+import { MoonIcon } from "@radix-ui/react-icons";
 
 type DrawerProps = {
   show: boolean;
@@ -22,6 +24,7 @@ type DrawerProps = {
 
 function Drawer({ show, onClose }: DrawerProps) {
   const handleLogout = useLogout();
+  const { handleSetTheme } = useTheme();
   return (
     <div
       className={`absolute top-0 bottom-0 border bg-background z-30 w-[20rem] py-5 flex flex-col ${
@@ -38,6 +41,11 @@ function Drawer({ show, onClose }: DrawerProps) {
         {drawerItems.map((item) => (
           <DrawerItem {...item} key={item.label} />
         ))}
+        <DrawerItem
+          label='Switch Theme'
+          icon={<MoonIcon />}
+          onClick={() => handleSetTheme()}
+        />
         <AlertDialog>
           <AlertDialogTrigger className='w-full'>
             <DrawerItem icon={<BiLogOut />} label='Logout' />

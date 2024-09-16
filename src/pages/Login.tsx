@@ -16,9 +16,12 @@ import { LoginSchema, LoginSchemaType } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import supabase from "@/supabase";
 import { useLogin } from "@/react-query/mutations";
+import { useEffect } from "react";
+import { useAuth } from "@/Providers/AuthProvider";
 
 function Login() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -35,6 +38,12 @@ function Login() {
       provider: "google",
     });
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const loginErrors = handleLoginWithPassword.error;
 

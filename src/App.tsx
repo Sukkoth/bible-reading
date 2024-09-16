@@ -10,20 +10,23 @@ import Plan from "@/pages/Plan";
 import NewPlan from "@/pages/NewPlan";
 import CompleteProfile from "@/pages/CompleteProfile";
 import AuthLayout from "@/components/Layouts/AuthLayout";
+import { useGetUser } from "./react-query/queries";
+import { useAuth } from "./Providers/AuthProvider";
+import MainLoader from "./components/Loaders/MainLoader";
 
 function App() {
-  const [theme] = useState("dark");
-  // let handleTheme = ()=>{
-  //   setTheme(theme === 'dark' ? "light":"dark")
-  // }
+  const { data, isPending } = useGetUser();
+  const { handleSetAuth } = useAuth();
 
   useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (data && data.user) {
+      handleSetAuth(data.user, data.profile);
     }
-  }, [theme]);
+  }, [data, handleSetAuth]);
+
+  if (isPending) {
+    return <MainLoader />;
+  }
 
   return (
     <Routes>

@@ -41,13 +41,12 @@ export function useRegister() {
 
 export function useCompleteProfile() {
   const { user, handleSetProfile, profile } = useAuth();
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: (formData: CompleteProfileSchemaType) =>
       UPDATE_PROFILE(formData, user!.id, profile?.id),
     onSuccess(data) {
       handleSetProfile(data);
-      navigate("/");
+      location.pathname = "/";
     },
   });
 }

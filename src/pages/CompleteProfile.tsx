@@ -14,15 +14,19 @@ import {
   CompleteProfileSchema,
   CompleteProfileSchemaType,
 } from "@/schemas/completeProfileSchema";
+import supabase from "@/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { BiLoader } from "react-icons/bi";
 
 export default function CompleteProfile() {
-  const { user } = useAuth();
-  const [_, setGender] = useState("");
+  const { user, profile } = useAuth();
+  const [, setGender] = useState("");
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false); //for file
   const handleCompleteProfile = useCompleteProfile();
-  console.log({ user });
+  console.log({ user, profile });
   const {
     register,
     handleSubmit,
@@ -36,6 +40,45 @@ export default function CompleteProfile() {
 
   const onSubmit: SubmitHandler<CompleteProfileSchemaType> = async (data) => {
     handleCompleteProfile.mutate(data);
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      return;
+    }
+    const file = event.target.files[0];
+    setUploading(true);
+
+    const { data, error } = await supabase.storage
+      .from("bible-reader")
+      .upload(
+        `temp-avatar/${file.name}${new Date().getTime().toString()}`,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+        }
+      );
+
+    console.log("Upload data", { data });
+
+    if (!error && data?.fullPath) {
+      clearErrors("avatar");
+      setValue(
+        "avatar",
+        `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${
+          data?.fullPath
+        }`
+      );
+      setImage(
+        `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${
+          data?.fullPath
+        }`
+      );
+    }
+    setUploading(false);
   };
 
   useEffect(() => {
@@ -97,9 +140,34 @@ export default function CompleteProfile() {
               user?.user_metadata?.avatar_url || user?.user_metadata.picture
             ) && (
               <div className='w-full'>
-                <Label htmlFor='avatar'>Profile Image</Label>
-                <Input id='avatar' type='file' className='py-3' />
+                <div className='flex gap-2 items-center'>
+                  <Label htmlFor='avatar'>Profile Image </Label>
+                  {uploading && (
+                    <span className='spin-loader'>
+                      <BiLoader />
+                    </span>
+                  )}
+                </div>
+                <Input
+                  id='avatar'
+                  type='file'
+                  className='py-3'
+                  disabled={uploading}
+                  onChange={handleFileChange}
+                />
+                {errors.avatar && (
+                  <span className='text-red-400 text-xs'>
+                    {errors.avatar.message}
+                  </span>
+                )}
               </div>
+            )}
+            {image.length ? (
+              <div className='size-24 rounded-full border'>
+                <img src={image} alt='' />
+              </div>
+            ) : (
+              ""
             )}
             <div className='flex justify-around w-full'>
               <div

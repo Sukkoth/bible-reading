@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ContextType = {
   theme: "light" | "dark";
-  handleSetTheme: (theme: "light" | "dark") => void;
+  handleSetTheme: (theme?: "light" | "dark") => void;
 };
 
 const ThemeContext = createContext<ContextType>({
@@ -11,10 +11,28 @@ const ThemeContext = createContext<ContextType>({
 });
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  console.log("in theme provider");
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const localTheme = localStorage.getItem("theme");
+    if (localTheme === "light") {
+      return "light";
+    } else {
+      return "dark";
+    }
+    // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {}
+  });
 
-  function handleSetTheme(theme: "light" | "dark") {
-    setTheme(theme);
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function handleSetTheme(theme?: "light" | "dark") {
+    setTheme(theme ? theme : (prev) => (prev === "dark" ? "light" : "dark"));
   }
 
   return (

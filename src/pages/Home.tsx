@@ -4,7 +4,7 @@ import { CgAdd } from "react-icons/cg";
 import * as DATE_UTILS from "@/utils/date-utils";
 import CalendarStatItem from "@/components/CalendarStatItem";
 import PlansItem from "@/components/PlansItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { plansData } from "@/data";
 import { useAuth } from "@/Providers/AuthProvider";
 import { useState } from "react";
@@ -12,10 +12,12 @@ import Drawer from "@/components/Drawer";
 
 function Home() {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [showDrawer, setShowDrawer] = useState(false);
 
-  return (
+  return user?.id && (!profile || !profile?.first_name) ? (
+    <Navigate to={"/complete-profile"} replace />
+  ) : (
     <div className='relative overflow-hidden'>
       <Drawer show={showDrawer} onClose={() => setShowDrawer(false)} />
       <div
@@ -93,7 +95,6 @@ function Home() {
           />
         </div>
       </div>
-      {/* <HomeDrawer /> */}
     </div>
   );
 }

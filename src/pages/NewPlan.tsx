@@ -11,7 +11,7 @@ function NewPlan() {
       </div>
       <div>
         {newPlansData.map((plan) => (
-          <NewPlanItem {...plan} />
+          <NewPlanItem {...plan} key={plan.title} />
         ))}
       </div>
     </div>
