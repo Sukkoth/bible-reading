@@ -42,16 +42,17 @@ function Home() {
           <Button
             size='default'
             className='w-full rounded-3xl py-5'
-            onClick={() => navigate("plans/new")}
+            onClick={() => navigate("plans/popular")}
           >
-            <CgAdd className='mr-2 h-4 w-4' /> New Plan
+            <BiGlasses className='mr-2 h-4 w-4' /> Browse Popular Plans
           </Button>
           <Button
             size='default'
             variant='outline'
             className='w-full rounded-3xl py-5'
+            onClick={() => navigate("plans/create/schedule/3")}
           >
-            <BiGlasses className='mr-2 h-4 w-4' /> Browse Popular Plans
+            <CgAdd className='mr-2 h-4 w-4' /> New Plan
           </Button>
         </div>
         <div className='mt-10'>

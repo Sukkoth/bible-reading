@@ -1,7 +1,14 @@
 import { useAuth } from "@/Providers/AuthProvider";
 import { LoginSchemaType } from "@/schemas/authSchema";
 import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
-import { LOGIN, LOGOUT, REGISTER, UPDATE_PROFILE } from "@/supabase/services";
+import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
+import {
+  CREATE_PLAN,
+  LOGIN,
+  LOGOUT,
+  REGISTER,
+  UPDATE_PROFILE,
+} from "@/supabase/services";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -47,6 +54,20 @@ export function useCompleteProfile() {
     onSuccess(data) {
       handleSetProfile(data);
       location.pathname = "/";
+    },
+  });
+}
+
+//* PLANS MUTATIONS
+export function useCreatePlan() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: (formData: CreatePlanSchemaType) =>
+      CREATE_PLAN(formData, user!.id),
+    mutationKey: ["create-plan"],
+    onSuccess(data) {
+      navigate(`/plans/create/schedule/${data.id}`);
     },
   });
 }

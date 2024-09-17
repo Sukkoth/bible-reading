@@ -16,19 +16,20 @@ declare interface Plan {
   id: number;
   name: string;
   description: string;
-  userId?: number;
-  converImg?: string;
+  createdBy?: number; //default is null (admin)
+  coverImg?: string;
   suggestedDuration: number;
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 declare interface UserPlan {
   id: number;
   planId: number;
   userId: number;
-  startDate: number;
-  endDate: number;
+  status: string; //started / completed
+  startDate: number; //null if !status
+  endDate: number; //null if !status
   schedule: Schedule[];
   type: PlanType;
 }

@@ -1,6 +1,7 @@
 import { LoginSchemaType } from "@/schemas/authSchema";
 import supabase from ".";
 import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
+import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
 
 export async function GET_USER() {
   const { data, error } = await supabase.auth.getUser();
@@ -75,4 +76,25 @@ export async function UPDATE_PROFILE(
   }
 
   return data[0];
+}
+
+//* PLAN SERVICES
+export async function CREATE_PLAN(
+  formData: CreatePlanSchemaType,
+  userId: string
+) {
+  const { data, error } = await supabase
+    .from("plans")
+    .insert({
+      ...formData,
+      createdBy: userId,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data;
 }

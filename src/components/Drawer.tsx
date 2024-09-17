@@ -29,7 +29,7 @@ function Drawer({ show, onClose }: DrawerProps) {
     <div
       className={`absolute top-0 bottom-0 border bg-background z-30 w-[20rem] py-5 flex flex-col ${
         show ? "right-0" : "-right-80"
-      } transition-all duration-500 opacity-100`}
+      } transition-all duration-300 opacity-100`}
     >
       <div
         className='text-primary hover:opacity-80 cursor-pointer self-end me-5'

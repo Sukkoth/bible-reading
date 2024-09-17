@@ -7,12 +7,14 @@ import MainLayout from "@/components/Layouts/MainLayout";
 import Home from "@/pages/Home";
 import Plans from "@/pages/Plans";
 import Plan from "@/pages/Plan";
-import NewPlan from "@/pages/NewPlan";
+import PopularPlans from "@/pages/NewPlan";
 import CompleteProfile from "@/pages/CompleteProfile";
 import AuthLayout from "@/components/Layouts/AuthLayout";
 import { useGetUser } from "./react-query/queries";
 import { useAuth } from "./Providers/AuthProvider";
 import MainLoader from "./components/Loaders/MainLoader";
+import CreatePlan from "./pages/CreatePlan";
+import CreatePlanSchedule from "./pages/CreatePlanSchedule";
 
 function App() {
   const { data, isPending } = useGetUser();
@@ -37,7 +39,12 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='/plans' element={<Plans />} />
-          <Route path='/plans/new' element={<NewPlan />} />
+          <Route path='/plans/popular' element={<PopularPlans />} />
+          <Route path='/plans/create' element={<CreatePlan />} />
+          <Route
+            path='/plans/create/schedule/:planId'
+            element={<CreatePlanSchedule />}
+          />
           <Route path='/plans/:planId' element={<Plan />} />
           <Route path='/complete-profile' element={<CompleteProfile />} />
         </Route>

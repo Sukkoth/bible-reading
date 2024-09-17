@@ -7,7 +7,7 @@ function NewPlan() {
     <div>
       <BackButton />
       <div className='pt-5'>
-        <h1 className='text-3xl'>New Plan</h1>
+        <h1 className='text-3xl'>Popular Plans</h1>
       </div>
       <div>
         {newPlansData.map((plan) => (

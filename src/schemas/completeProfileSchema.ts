@@ -11,11 +11,7 @@ export const CompleteProfileSchema = z.object({
   gender: z.string({
     required_error: "Gender field is required",
   }),
-  avatar: z
-    .string({
-      required_error: "Cover image is required",
-    })
-    .startsWith("https://"),
+  avatar: z.string().startsWith("https://").optional(),
 });
 
 export type CompleteProfileSchemaType = z.infer<typeof CompleteProfileSchema>;
