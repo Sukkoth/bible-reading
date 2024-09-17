@@ -11,7 +11,6 @@ const ThemeContext = createContext<ContextType>({
 });
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  console.log("in theme provider");
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const localTheme = localStorage.getItem("theme");
     if (localTheme === "light") {

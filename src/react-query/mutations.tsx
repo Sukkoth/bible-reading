@@ -4,6 +4,8 @@ import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
 import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
 import {
   CREATE_PLAN,
+  CREATE_PLAN_SCHEDULE,
+  CreatePlanSchedule,
   LOGIN,
   LOGOUT,
   REGISTER,
@@ -67,7 +69,23 @@ export function useCreatePlan() {
       CREATE_PLAN(formData, user!.id),
     mutationKey: ["create-plan"],
     onSuccess(data) {
-      navigate(`/plans/create/schedule/${data.id}`);
+      navigate(`/plans/create/schedule/${data.id}`, {
+        replace: true,
+      });
+    },
+  });
+}
+
+export function useCreatePlanSchedule() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: (formData: CreatePlanSchedule) =>
+      CREATE_PLAN_SCHEDULE(formData, user!.id),
+    onSuccess(data) {
+      navigate(`/plans/${data.id}`, {
+        replace: true,
+      });
     },
   });
 }

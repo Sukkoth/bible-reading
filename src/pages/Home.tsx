@@ -50,7 +50,7 @@ function Home() {
             size='default'
             variant='outline'
             className='w-full rounded-3xl py-5'
-            onClick={() => navigate("plans/create/schedule/3")}
+            onClick={() => navigate("plans/create")}
           >
             <CgAdd className='mr-2 h-4 w-4' /> New Plan
           </Button>

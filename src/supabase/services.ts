@@ -98,3 +98,50 @@ export async function CREATE_PLAN(
 
   return data;
 }
+
+export type CreatePlanSchedule = {
+  planId: number;
+  startDate: Date;
+  endDate: Date;
+  type?: string;
+  schedules: {
+    id: string;
+    date: Date;
+    items: {
+      status: string;
+      goal: string;
+      notes?: string;
+    }[];
+  }[];
+};
+
+export async function CREATE_PLAN_SCHEDULE(
+  formData: CreatePlanSchedule,
+  userId: string
+) {
+  const { data, error } = await supabase
+    .from("userSchedule")
+    .insert({ ...formData, userId })
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data;
+}
+
+export async function GET_PLAN_SCHEDULE(scheduleId: number) {
+  let { data, error } = await supabase
+    .from("userSchedule")
+    .select("*, plans(*)")
+    .eq("id", scheduleId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data as UserPlan;
+}

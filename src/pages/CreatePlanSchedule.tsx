@@ -36,6 +36,9 @@ import {
 } from "@/components/ui/popover";
 import { Minus, PlusIcon } from "lucide-react";
 import { FaHourglassEnd } from "react-icons/fa6";
+import { v4 as uuidv4 } from "uuid";
+import { useCreatePlanSchedule } from "@/react-query/mutations";
+import type { CreatePlanSchedule } from "@/supabase/services";
 
 function CreatePlanSchedule() {
   const { planId } = useParams();
@@ -45,6 +48,8 @@ function CreatePlanSchedule() {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [chapterCount, setChapterCount] = useState(1);
+
+  const handleAddPlanToDb = useCreatePlanSchedule();
 
   function handleSelected() {
     console.log("SELECTED IN REF", selectionRef.current);
@@ -87,6 +92,53 @@ function CreatePlanSchedule() {
         )
       );
   }, [chapterCount, startDate]);
+
+  function handleGenerateData() {
+    //get books along with chapters
+    const booksWithChapters = selected
+      .map((selectedBook) => {
+        const selectedBookDetail = books.filter(
+          ({ book: bibleBook }) => bibleBook === selectedBook
+        )[0];
+        const mappedDatesAndChapters: {
+          status: string;
+          goal: string;
+          notes: string;
+        }[] = Array.from(
+          { length: selectedBookDetail.chapters },
+          (_, index) => {
+            return {
+              status: "PENDING",
+              goal: `${selectedBookDetail.book} ${index + 1}`,
+              notes: "",
+            };
+          }
+        );
+        return mappedDatesAndChapters;
+      })
+      .flat(2);
+
+    // console.log(booksWithChapters);
+    //distribute chapters on date
+    let plan = [];
+
+    for (let i = 0; i < booksWithChapters.length; i += chapterCount) {
+      plan.push({
+        id: uuidv4(),
+        date: addDays(startDate!, i / chapterCount),
+        items: booksWithChapters.slice(i, i + chapterCount),
+      });
+    }
+
+    const finalDataToInsert: CreatePlanSchedule = {
+      planId: parseInt(planId!),
+      startDate: startDate!,
+      endDate: endDate!,
+      schedules: plan,
+    };
+
+    handleAddPlanToDb.mutate(finalDataToInsert);
+  }
 
   return (
     <div className=''>
@@ -275,16 +327,7 @@ function CreatePlanSchedule() {
                         totalBooks.chapters % chapterCount}{" "}
                       remainder
                     </p>
-                    <p>
-                      {startDate &&
-                        endDate &&
-                        formatDuration(
-                          intervalToDuration({
-                            start: addDays(startDate, -1),
-                            end: endDate,
-                          })
-                        )}
-                    </p>
+                    
                   </div> */}
                   {/*  */}
                 </div>
@@ -331,8 +374,15 @@ function CreatePlanSchedule() {
             >
               Back to book selection
             </Button>
-            <Button size={"lg"} className='w-full'>
-              Generate Plan
+            <Button
+              size={"lg"}
+              disabled={handleAddPlanToDb.isPending}
+              className='w-full'
+              onClick={handleGenerateData}
+            >
+              {handleAddPlanToDb.isPending
+                ? "Generating . . ."
+                : "Generate Plan"}
             </Button>
           </div>
         )}
