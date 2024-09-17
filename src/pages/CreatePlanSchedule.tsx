@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import PlanDetailItem from "@/components/PlanDetailItem";
 import { BiBook } from "react-icons/bi";
-import { IoMdBook } from "react-icons/io";
+import { IoIosSend, IoMdBook } from "react-icons/io";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import {
@@ -35,6 +35,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Minus, PlusIcon } from "lucide-react";
+import { FaHourglassEnd } from "react-icons/fa6";
 
 function CreatePlanSchedule() {
   const { planId } = useParams();
@@ -213,48 +214,8 @@ function CreatePlanSchedule() {
                         </PopoverContent>
                       </Popover>
                     </div>
+                  </div>
 
-                    <div className='flex flex-col gap-2'>
-                      <Label>End Date</Label>
-                      <div>
-                        <Button
-                          size={"lg"}
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal cursor-default",
-                            !endDate && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className='mr-2 h-4 w-4' />
-                          {endDate ? (
-                            format(endDate, "PPP")
-                          ) : (
-                            <span>Pick Start Date</span>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  {/**  */}
-                  <div className='text-sm'>
-                    <p>
-                      {startDate &&
-                        endDate &&
-                        totalBooks.chapters % chapterCount}{" "}
-                      remainder
-                    </p>
-                    <p>
-                      {startDate &&
-                        endDate &&
-                        formatDuration(
-                          intervalToDuration({
-                            start: addDays(startDate, -1),
-                            end: endDate,
-                          })
-                        )}
-                    </p>
-                  </div>
-                  {/*  */}
                   <div className='flex justify-center'>
                     <div className='flex items-center gap-4'>
                       <Button
@@ -286,7 +247,79 @@ function CreatePlanSchedule() {
                       </Button>
                     </div>
                   </div>
+                  {/* <div className='flex flex-col gap-2'>
+                    <Label>End Date</Label>
+                    <div>
+                      <Button
+                        size={"lg"}
+                        variant={"ghost"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal cursor-default",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className='mr-2 h-4 w-4' />
+                        {endDate ? (
+                          format(endDate, "PPP")
+                        ) : (
+                          <span>Pick Start Date</span>
+                        )}
+                      </Button>
+                    </div>
+                  </div> */}
+                  {/**  */}
+                  {/* <div className='text-sm'>
+                    <p>
+                      {startDate &&
+                        endDate &&
+                        totalBooks.chapters % chapterCount}{" "}
+                      remainder
+                    </p>
+                    <p>
+                      {startDate &&
+                        endDate &&
+                        formatDuration(
+                          intervalToDuration({
+                            start: addDays(startDate, -1),
+                            end: endDate,
+                          })
+                        )}
+                    </p>
+                  </div> */}
+                  {/*  */}
                 </div>
+                <div className='grid grid-cols-3 mt-5 gap-3'>
+                  <PlanDetailItem
+                    header='Per Day'
+                    subText={`${chapterCount} Chapters`}
+                    icon={<IoMdBook size={20} />}
+                  />
+                  {startDate && (
+                    <PlanDetailItem
+                      header='Starts'
+                      subText={`${format(startDate, "MMM d,y")}`}
+                      icon={<IoIosSend size={20} />}
+                    />
+                  )}
+                  {endDate && (
+                    <PlanDetailItem
+                      header='Ends'
+                      subText={`${format(endDate, "MMM d,y")}`}
+                      icon={<FaHourglassEnd size={20} />}
+                    />
+                  )}
+                </div>
+                {startDate && endDate && (
+                  <p className='text-center text-sm mt-5'>
+                    You will finish this plan in{" "}
+                    {formatDuration(
+                      intervalToDuration({
+                        start: addDays(startDate, -1),
+                        end: endDate,
+                      })
+                    )}
+                  </p>
+                )}
               </CardContent>
             </Card>
 
@@ -297,6 +330,9 @@ function CreatePlanSchedule() {
               onClick={() => setShowTime(false)}
             >
               Back to book selection
+            </Button>
+            <Button size={"lg"} className='w-full'>
+              Generate Plan
             </Button>
           </div>
         )}

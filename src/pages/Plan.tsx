@@ -83,7 +83,7 @@ const planDetail = [
   },
   {
     icon: <BsCalendar4Week size={20} />,
-    header: " Per Week",
+    header: "Per Week",
     subText: "5 Sessions",
   },
   {
