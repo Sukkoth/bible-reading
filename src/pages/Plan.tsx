@@ -36,6 +36,13 @@ function Plan() {
 
   const { data } = plan;
 
+  const target = data.totalChapters;
+  const progress = data.schedules?.filter((schedule) =>
+    schedule.items.every((item) => item.status === "COMPLETED")
+  ).length;
+
+  const completedPercent = Math.round((progress / target) * 100) || 0;
+
   const planDetail = [
     {
       icon: <IoIosSend size={20} />,
@@ -50,22 +57,22 @@ function Plan() {
     {
       icon: <FiBookOpen size={20} />,
       header: "Per Session",
-      subText: data.schedules[0].items.length.toString(),
+      subText: `${data.perDay}`,
     },
     {
       icon: <BsCalendar4Week size={20} />,
       header: "Per Week",
-      subText: "7 Sessions",
+      subText: `${data.perDay * 7} Sessions `,
     },
     {
       icon: <IoCheckmarkDoneOutline size={20} />,
       header: "Completed",
-      subText: "70%",
+      subText: `${completedPercent}%`,
     },
     {
       icon: <TbCategory size={20} />,
       header: "Type",
-      subText: "Book",
+      subText: "Bible Book",
     },
   ];
 
@@ -79,16 +86,12 @@ function Plan() {
         <CardHeader>
           <div className='w-28 xs:w-40'>
             <CalendarStatItem
-              {...plansData[0]}
+              target={target}
+              progress={progress}
+              type='bible'
               strokeWidth={10}
               children={
-                <h1 className='text-3xl font-bold'>
-                  {`${
-                    Math.round(
-                      (plansData[0].progress / plansData[0].target) * 100
-                    ) || 0
-                  }%`}
-                </h1>
+                <h1 className='text-3xl font-bold'>{`${completedPercent}%`}</h1>
               }
             />
           </div>

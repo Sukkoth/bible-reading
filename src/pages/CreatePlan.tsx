@@ -29,7 +29,6 @@ function CreatePlan() {
     register,
     handleSubmit,
     setValue,
-    getValues,
     clearErrors,
     formState: { errors },
   } = useForm<CreatePlanSchemaType>({
@@ -60,8 +59,6 @@ function CreatePlan() {
         }
       );
 
-    console.log("Upload data", { data });
-
     if (!error && data?.fullPath) {
       clearErrors("coverImg");
       setValue(
@@ -81,10 +78,8 @@ function CreatePlan() {
 
   return (
     <div>
-      <div>
-        <BackButton />
-      </div>
-      <Card className='mx-5 w-full bg-transparent'>
+      <BackButton />
+      <Card className='w-full bg-transparent mt-5'>
         <CardHeader>
           <CardTitle className='text-3xl'>Create your own plan</CardTitle>
           <CardDescription>

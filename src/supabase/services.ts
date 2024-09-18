@@ -103,6 +103,9 @@ export type CreatePlanSchedule = {
   planId: number;
   startDate: Date;
   endDate: Date;
+  totalChapters: number;
+  totalBooks: number;
+  perDay: number;
   type?: string;
   schedules: {
     id: string;
@@ -120,7 +123,7 @@ export async function CREATE_PLAN_SCHEDULE(
   userId: string
 ) {
   const { data, error } = await supabase
-    .from("userSchedule")
+    .from("userSchedules")
     .insert({ ...formData, userId })
     .select()
     .single();
@@ -134,7 +137,7 @@ export async function CREATE_PLAN_SCHEDULE(
 
 export async function GET_PLAN_SCHEDULE(scheduleId: number) {
   let { data, error } = await supabase
-    .from("userSchedule")
+    .from("userSchedules")
     .select("*, plans(*)")
     .eq("id", scheduleId)
     .single();
@@ -142,6 +145,17 @@ export async function GET_PLAN_SCHEDULE(scheduleId: number) {
   if (error) {
     throw new Error(error.message || "Something went wrong");
   }
-
   return data as UserPlan;
+}
+
+export async function GET_PLANS(userId: string) {
+  const { data, error } = await supabase
+    .from("userSchedules")
+    .select("*, plans(*)")
+    .eq("userId", userId);
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data as UserPlan[];
 }

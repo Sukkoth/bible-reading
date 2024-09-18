@@ -53,6 +53,7 @@ declare interface Plan {
   createdBy?: string | null; // null if created by admin
   coverImg?: string | null;
   suggestedDuration: number;
+  userSchedules?: UserPlan[];
   created_at: string; // ISO Date string
   updatedAt: string; // ISO Date string
 }
@@ -81,5 +82,8 @@ interface UserPlan {
   endDate: string; // ISO Date string
   type?: string | null; // Can be null or string depending on the use case
   schedules: Schedule[];
+  totalChapters: number;
+  totalBooks: number;
+  perDay: number;
   plans: Plan; // Linked Plan data
 }

@@ -124,6 +124,9 @@ function CreatePlanSchedule() {
       startDate: startDate!,
       endDate: endDate!,
       schedules: plan,
+      totalBooks: totalBooks.books,
+      totalChapters: totalBooks.chapters,
+      perDay: chapterCount,
     };
 
     handleAddPlanToDb.mutate(finalDataToInsert);
@@ -133,7 +136,7 @@ function CreatePlanSchedule() {
     <div className=''>
       <BackButton />
       <div className='pt-5'>
-        <h1 className='text-2xl xs:text-3xl'>Create Schedule for {planId}</h1>
+        <h1 className='text-2xl xs:text-3xl'>Create Schedule</h1>
         <p className='text-sm'>* Select Books to read</p>
         <p className='text-sm'>
           * Books are added to list according to select order

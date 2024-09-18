@@ -8,7 +8,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthProvider from "./Providers/AuthProvider.tsx";
 import ThemeProvider from "./Providers/ThemeProvider.tsx";
 
-const queryClient = new QueryClient();
+//TODO Remove this when deploying
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

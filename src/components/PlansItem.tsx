@@ -8,11 +8,12 @@ type Props = {
   progress: number;
   text: string;
   subText: string;
+  to: string;
 };
-function PlansItem({ target, progress, type, text, subText }: Props) {
+function PlansItem({ target, progress, type, text, subText, to }: Props) {
   return (
     <Link
-      to='/plans/234543'
+      to={to}
       className='border my-3 border-stone-700 hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
     >
       <div className='w-16 me-5 flex justify-center'>
