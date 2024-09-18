@@ -106,7 +106,7 @@ export type CreatePlanSchedule = {
   type?: string;
   schedules: {
     id: string;
-    date: Date;
+    date: string;
     items: {
       status: string;
       goal: string;

@@ -18,9 +18,6 @@ import { useParams } from "react-router-dom";
 import { format } from "date-fns";
 
 function Plan() {
-  //   const { planId } = useParams();
-  const startDate = new Date("9-14-2024");
-  const endDate = new Date("9-16-2025");
   const { planId } = useParams();
 
   const plan = useGetPlanSchedule(parseInt(planId!));

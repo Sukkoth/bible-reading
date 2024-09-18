@@ -61,11 +61,12 @@ export default function PlanCalendarView({ schedules }: Props) {
       >
         <CarouselContent className='ml-1 w-[150px] xs:w-[280px]'>
           {schedules.schedules.map((schedule, index) => {
-            const parsedDate = formatInTimeZone(
-              schedule.date,
-              "UTC",
-              "yyyy-MM-dd"
-            ); // Keep it in UTC
+            // const parsedDate = formatInTimeZone(
+            //   schedule.date,
+            //   "UTC",
+            //   "yyyy-MM-dd"
+            // ); // Keep it in UTC
+            const parsedDate = schedule.date;
 
             return (
               <CarouselItem

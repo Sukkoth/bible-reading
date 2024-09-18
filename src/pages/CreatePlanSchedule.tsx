@@ -10,15 +10,7 @@ import { BiBook } from "react-icons/bi";
 import { IoIosSend, IoMdBook } from "react-icons/io";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import {
-  addDays,
-  differenceInCalendarDays,
-  differenceInCalendarYears,
-  format,
-  formatDuration,
-  getYear,
-  intervalToDuration,
-} from "date-fns";
+import { addDays, format, formatDuration, intervalToDuration } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -42,7 +34,7 @@ import type { CreatePlanSchedule } from "@/supabase/services";
 
 function CreatePlanSchedule() {
   const { planId } = useParams();
-  const selectionRef = useRef<string[]>([]);
+  const selectionRef = useRef<string[]>([]); //to not re-render expensive list of bible books
   const [selected, setSelected] = useState<string[]>([]);
   const [showTime, setShowTime] = useState(false);
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
@@ -52,14 +44,9 @@ function CreatePlanSchedule() {
   const handleAddPlanToDb = useCreatePlanSchedule();
 
   function handleSelected() {
-    console.log("SELECTED IN REF", selectionRef.current);
     setSelected(selectionRef.current);
     setShowTime(true);
   }
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
 
   const selectedBooksDetail = books.filter(({ book: bookName }) =>
     selected.includes(bookName)
@@ -118,14 +105,16 @@ function CreatePlanSchedule() {
       })
       .flat(2);
 
-    // console.log(booksWithChapters);
     //distribute chapters on date
     let plan = [];
 
     for (let i = 0; i < booksWithChapters.length; i += chapterCount) {
       plan.push({
         id: uuidv4(),
-        date: addDays(startDate!, i / chapterCount),
+        date: format(
+          addDays(startDate!, i / chapterCount),
+          "yyyy-MM-dd HH:mm:ss"
+        ),
         items: booksWithChapters.slice(i, i + chapterCount),
       });
     }
@@ -255,10 +244,7 @@ function CreatePlanSchedule() {
                         <PopoverContent className='w-auto p-0' align='start'>
                           <Calendar
                             mode='single'
-                            disabled={
-                              (date) => date < addDays(new Date(), -1)
-                              // date < addDays(startDate || new Date(), -1)
-                            }
+                            disabled={(date) => date < addDays(new Date(), -1)}
                             selected={startDate}
                             onSelect={setStartDate}
                             initialFocus
@@ -299,37 +285,6 @@ function CreatePlanSchedule() {
                       </Button>
                     </div>
                   </div>
-                  {/* <div className='flex flex-col gap-2'>
-                    <Label>End Date</Label>
-                    <div>
-                      <Button
-                        size={"lg"}
-                        variant={"ghost"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal cursor-default",
-                          !endDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className='mr-2 h-4 w-4' />
-                        {endDate ? (
-                          format(endDate, "PPP")
-                        ) : (
-                          <span>Pick Start Date</span>
-                        )}
-                      </Button>
-                    </div>
-                  </div> */}
-                  {/**  */}
-                  {/* <div className='text-sm'>
-                    <p>
-                      {startDate &&
-                        endDate &&
-                        totalBooks.chapters % chapterCount}{" "}
-                      remainder
-                    </p>
-                    
-                  </div> */}
-                  {/*  */}
                 </div>
                 <div className='grid grid-cols-3 mt-5 gap-3'>
                   <PlanDetailItem
