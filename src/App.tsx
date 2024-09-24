@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import NotFound from "@/pages/NotFound";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MainLayout from "@/components/Layouts/MainLayout";
 import Home from "@/pages/Home";
 import Plans from "@/pages/Plans";
