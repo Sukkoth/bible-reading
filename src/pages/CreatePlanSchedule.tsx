@@ -28,9 +28,9 @@ import {
 } from "@/components/ui/popover";
 import { Minus, PlusIcon } from "lucide-react";
 import { FaHourglassEnd } from "react-icons/fa6";
-import { v4 as uuidv4 } from "uuid";
 import { useCreatePlanSchedule } from "@/react-query/mutations";
 import type { CreatePlanSchedule } from "@/supabase/services";
+import { GenerateScheduleDataForDb } from "@/utils/generateScheduleData";
 
 function CreatePlanSchedule() {
   const { planId } = useParams();
@@ -63,12 +63,6 @@ function CreatePlanSchedule() {
     { chapters: 0, verses: 0, books: 0 }
   );
 
-  // const totalBooks = {
-  //   books: 66,
-  //   chapters: 1189,
-  //   verses: 31102,
-  // };
-
   useEffect(() => {
     //whenever chapter count and startDay change, push back the end date
     if (startDate)
@@ -81,55 +75,18 @@ function CreatePlanSchedule() {
   }, [chapterCount, startDate]);
 
   function handleGenerateData() {
-    //get books along with chapters
-    const booksWithChapters = selected
-      .map((selectedBook) => {
-        const selectedBookDetail = books.filter(
-          ({ book: bibleBook }) => bibleBook === selectedBook
-        )[0];
-        const mappedDatesAndChapters: {
-          status: string;
-          goal: string;
-          notes: string;
-        }[] = Array.from(
-          { length: selectedBookDetail.chapters },
-          (_, index) => {
-            return {
-              status: "PENDING",
-              goal: `${selectedBookDetail.book} ${index + 1}`,
-              notes: "",
-            };
-          }
-        );
-        return mappedDatesAndChapters;
-      })
-      .flat(2);
-
-    //distribute chapters on date
-    let plan = [];
-
-    for (let i = 0; i < booksWithChapters.length; i += chapterCount) {
-      plan.push({
-        id: uuidv4(),
-        date: format(
-          addDays(startDate!, i / chapterCount),
-          "yyyy-MM-dd HH:mm:ss"
-        ),
-        items: booksWithChapters.slice(i, i + chapterCount),
+    if (startDate && endDate && planId) {
+      const parsedData = GenerateScheduleDataForDb({
+        selectedBooks: selected,
+        startDate,
+        endDate,
+        chapterCount,
+        planId,
+        totalBooks: totalBooks.books,
+        totalChapters: totalBooks.chapters,
       });
+      handleAddPlanToDb.mutate(parsedData);
     }
-
-    const finalDataToInsert: CreatePlanSchedule = {
-      planId: parseInt(planId!),
-      startDate: startDate!,
-      endDate: endDate!,
-      schedules: plan,
-      totalBooks: totalBooks.books,
-      totalChapters: totalBooks.chapters,
-      perDay: chapterCount,
-    };
-
-    handleAddPlanToDb.mutate(finalDataToInsert);
   }
 
   return (
@@ -213,9 +170,9 @@ function CreatePlanSchedule() {
                 Plan your reading schedule
                 <CardDescription className='pt-2'>
                   You can select your start date (defaults to today) and your
-                  end date. If you are not sure about the end, you can use the
-                  counter to adjust how many chpaters you want to read per day
-                  and the end date will calculated according to it.
+                  end date. You can use thevcounter to adjust how many chapters
+                  you want to read per day and the end date will calculated
+                  according to it.
                   <span className='block border px-2 py-3 rounded-sm mt-3'>
                     ⚠️ Minimim is 1 chapter a day
                   </span>

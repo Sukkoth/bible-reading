@@ -1,4 +1,4 @@
-declare type ScheduleStatus = "PENDING" | "COMPLETE" | "";
+declare type ScheduleStatus = "PENDING" | "COMPLETE";
 declare type PlanType = "BOOK" | "BIBLE";
 
 declare interface Profile {
@@ -12,39 +12,6 @@ declare interface Profile {
   user_id: string;
 }
 
-// declare interface Plan {
-//   id: number;
-//   name: string;
-//   description: string;
-//   createdBy?: number; //default is null (admin)
-//   coverImg?: string;
-//   suggestedDuration: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// declare interface UserPlan {
-//   id: number;
-//   planId: number;
-//   userId: number;
-//   status: string; //started / completed
-//   startDate: number; //null if !status
-//   endDate: number; //null if !status
-//   schedule: Schedule[];
-//   type: PlanType;
-// }
-
-// declare interface Schedule {
-//   id: number;
-//   date: Date;
-//   items: {
-//     status: ScheduleStatus;
-//     goal: string;
-//     completedAt?: Date;
-//     notes: string;
-//   }[];
-// }
-
 // Plan interface
 declare interface Plan {
   id: number;
@@ -53,23 +20,23 @@ declare interface Plan {
   createdBy?: string | null; // null if created by admin
   coverImg?: string | null;
   suggestedDuration: number;
-  userSchedules?: UserPlan[];
-  created_at: string; // ISO Date string
-  updatedAt: string; // ISO Date string
+  userPlans?: UserPlan[];
+  created_at: string;
+  updatedAt: string;
 }
 
 // Schedule Item interface
 interface ScheduleItem {
   goal: string;
   notes: string;
-  status: "PENDING" | "COMPLETED"; // Assuming these are the possible statuses
-  completedAt?: string; // Optional in case status is completed
+  status: "PENDING" | "COMPLETED";
+  completedAt?: string;
 }
 
 // Schedule interface
 interface Schedule {
   id: string;
-  date: string; // ISO Date string
+  date: string;
   items: ScheduleItem[];
 }
 
@@ -77,13 +44,15 @@ interface Schedule {
 interface UserPlan {
   id: number;
   planId: number;
-  userId: string; // UUID string
-  startDate: string; // ISO Date string
-  endDate: string; // ISO Date string
-  type?: string | null; // Can be null or string depending on the use case
+  userId: string;
+  startDate: string;
+  endDate: string;
+  type?: string | null;
   schedules: Schedule[];
   totalChapters: number;
   totalBooks: number;
   perDay: number;
-  plans: Plan; // Linked Plan data
+  plans: Plan;
 }
+
+// Plan => UserPlan (userSchedules) => Schedule => ScheduleItem

@@ -8,10 +8,12 @@ import {
   CreatePlanSchedule,
   LOGIN,
   LOGOUT,
+  MarkPlanGoalData,
   REGISTER,
   UPDATE_PROFILE,
+  UPDATE_SCHEDULE_ITEM_STATUS,
 } from "@/supabase/services";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
@@ -86,6 +88,14 @@ export function useCreatePlanSchedule() {
       navigate(`/plans/${data.id}`, {
         replace: true,
       });
+    },
+  });
+}
+
+export function useUpdateScheduleItemStatus() {
+  return useMutation({
+    mutationFn(data: MarkPlanGoalData) {
+      return UPDATE_SCHEDULE_ITEM_STATUS(data);
     },
   });
 }

@@ -1,5 +1,3 @@
-// import { useParams } from "react-router-dom";
-import { plansData } from "@/data";
 import CalendarStatItem from "@/components/CalendarStatItem";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IoIosSend } from "react-icons/io";
@@ -16,11 +14,21 @@ import BackButton from "@/components/BackButton";
 import { useGetPlanSchedule } from "@/react-query/queries";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
+import { useCallback, useState } from "react";
 
 function Plan() {
+  const [, setRenderOnPlanItemUpdate] = useState(false);
   const { planId } = useParams();
 
   const plan = useGetPlanSchedule(parseInt(planId!));
+
+  const handleUpdatePlanItemStatus = useCallback(() => {
+    //just rerender when schedule item's status is updated
+    //needed this because the status is in child component
+    //but progress showing component is in parent.
+    //so trigger re-render by state update, to update the status count
+    setRenderOnPlanItemUpdate((prev) => !prev);
+  }, []);
 
   if (plan.isPending) {
     return <div>Loading...</div>;
@@ -37,9 +45,11 @@ function Plan() {
   const { data } = plan;
 
   const target = data.totalChapters;
-  const progress = data.schedules?.filter((schedule) =>
-    schedule.items.every((item) => item.status === "COMPLETED")
-  ).length;
+
+  const progress = data.schedules
+    .map((schedule) => schedule.items)
+    .flat(2)
+    .filter((schedule) => schedule.status === "COMPLETED").length;
 
   const completedPercent = Math.round((progress / target) * 100) || 0;
 
@@ -104,7 +114,10 @@ function Plan() {
           </div>
           <Separator className='my-5' />
 
-          <PlanCalendarView schedules={data} />
+          <PlanCalendarView
+            schedules={data}
+            onItemStatusUpdate={handleUpdatePlanItemStatus}
+          />
           <Separator className='my-5' />
 
           <div className='w-full'>

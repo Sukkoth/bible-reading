@@ -38,14 +38,16 @@ function App() {
         <Route path='*' element={<NotFound />} />
         <Route element={<AuthLayout />}>
           <Route path='/' element={<Home />} />
-          <Route path='/plans' element={<Plans />} />
-          <Route path='/plans/popular' element={<PopularPlans />} />
-          <Route path='/plans/create' element={<CreatePlan />} />
-          <Route
-            path='/plans/create/schedule/:planId'
-            element={<CreatePlanSchedule />}
-          />
-          <Route path='/plans/:planId' element={<Plan />} />
+          <Route path='/plans'>
+            <Route index element={<Plans />} />
+            <Route path=':planId' element={<Plan />} />
+            <Route path='popular' element={<PopularPlans />} />
+            <Route path='create' element={<CreatePlan />} />
+            <Route
+              path='create/schedule/:planId'
+              element={<CreatePlanSchedule />}
+            />
+          </Route>
           <Route path='/complete-profile' element={<CompleteProfile />} />
         </Route>
       </Route>

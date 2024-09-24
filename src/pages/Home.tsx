@@ -9,11 +9,15 @@ import { plansData } from "@/data";
 import { useAuth } from "@/Providers/AuthProvider";
 import { useState } from "react";
 import Drawer from "@/components/Drawer";
+import { useGetTodaysPlans } from "@/react-query/queries";
 
 function Home() {
   const navigate = useNavigate();
   const { profile, user } = useAuth();
   const [showDrawer, setShowDrawer] = useState(false);
+  const todaysPlans = useGetTodaysPlans();
+
+  console.log(todaysPlans?.data);
 
   return user?.id && (!profile || !profile?.first_name) ? (
     <Navigate to={"/complete-profile"} replace />
@@ -79,21 +83,25 @@ function Home() {
               View all
             </Link>
           </div>
-          <PlansItem
-            {...plansData[2]}
-            text='Chronological Bible'
-            subText='4 Chapters'
-          />
-          <PlansItem
-            {...plansData[2]}
-            text='Lutheran Difference'
-            subText='20 Pages'
-          />
-          <PlansItem
-            {...plansData[2]}
-            text='Art of database design'
-            subText='10 Pages'
-          />
+          {todaysPlans.data?.length
+            ? todaysPlans.data.map((plan) => {
+                const target = plan.schedules[0].items.length;
+                const progress = plan.schedules[0].items.filter(
+                  (item) => item.status === "COMPLETED"
+                ).length;
+                return (
+                  <PlansItem
+                    key={plan.id}
+                    target={target}
+                    progress={progress}
+                    type='Chapters'
+                    text={plan.plans.name}
+                    subText={`${progress}/${target} Chapters`}
+                    to={`/plans/${plan.id}`}
+                  />
+                );
+              })
+            : "You got no plans for today"}
         </div>
       </div>
     </div>

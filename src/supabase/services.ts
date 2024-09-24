@@ -67,7 +67,8 @@ export async function UPDATE_PROFILE(
   const { data, error } = await supabase
     .from("profiles")
     .upsert(dataToUpdate)
-    .select();
+    .select()
+    .single();
 
   console.log("UPSERT DATA", data, "Error", error);
 
@@ -75,7 +76,7 @@ export async function UPDATE_PROFILE(
     throw new Error(error?.message || "Something went wrong");
   }
 
-  return data[0];
+  return data;
 }
 
 //* PLAN SERVICES
@@ -108,7 +109,6 @@ export type CreatePlanSchedule = {
   perDay: number;
   type?: string;
   schedules: {
-    id: string;
     date: string;
     items: {
       status: string;
@@ -122,9 +122,10 @@ export async function CREATE_PLAN_SCHEDULE(
   formData: CreatePlanSchedule,
   userId: string
 ) {
+  const { schedules, ...otherData } = formData;
   const { data, error } = await supabase
-    .from("userSchedules")
-    .insert({ ...formData, userId })
+    .from("userPlans")
+    .insert({ ...otherData, userId })
     .select()
     .single();
 
@@ -132,13 +133,27 @@ export async function CREATE_PLAN_SCHEDULE(
     throw new Error(error.message || "Something went wrong");
   }
 
+  const { error: scheduleError } = await supabase.from("schedules").insert(
+    schedules.map((schedule) => {
+      return {
+        ...schedule,
+        userPlanId: data.id,
+      };
+    })
+  );
+
+  if (scheduleError) {
+    throw new Error(scheduleError.message || "Something wenet wrong!");
+  }
+
   return data;
 }
 
 export async function GET_PLAN_SCHEDULE(scheduleId: number) {
-  let { data, error } = await supabase
-    .from("userSchedules")
-    .select("*, plans(*)")
+  const { data, error } = await supabase
+    .from("userPlans")
+    .select("*, plans(*), schedules(*)")
+    .order("id", { referencedTable: "schedules" })
     .eq("id", scheduleId)
     .single();
 
@@ -150,12 +165,49 @@ export async function GET_PLAN_SCHEDULE(scheduleId: number) {
 
 export async function GET_PLANS(userId: string) {
   const { data, error } = await supabase
-    .from("userSchedules")
-    .select("*, plans(*)")
+    .from("userPlans")
+    .select("*, plans(*), schedules(*)")
+    .order("id", { referencedTable: "schedules" })
     .eq("userId", userId);
   if (error) {
     throw new Error(error.message || "Something went wrong");
   }
 
   return data as UserPlan[];
+}
+
+export type MarkPlanGoalData = {
+  scheduleId: string;
+  items: Schedule;
+};
+
+export async function UPDATE_SCHEDULE_ITEM_STATUS(formData: MarkPlanGoalData) {
+  const { data, error } = await supabase
+    .from("schedules")
+    .update({ items: formData.items.items })
+    .eq("id", formData.scheduleId)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data as Schedule;
+}
+
+export async function GET_TODAYS_PLANS(userId: string) {
+  const { data, error } = await supabase
+    .from("userPlans")
+    .select("*, plans(*), schedules(*)")
+    .eq("userId", userId)
+    .eq("schedules.date", new Date().toLocaleDateString());
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return (data as UserPlan[])?.filter(
+    (dataItem) => dataItem.schedules.length > 0
+  );
 }

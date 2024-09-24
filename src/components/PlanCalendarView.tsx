@@ -8,10 +8,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
-  addDays,
   differenceInCalendarDays,
   format,
-  formatDate,
+  isBefore,
   isSameDay,
 } from "date-fns";
 import { useEffect, useState } from "react";
@@ -19,25 +18,55 @@ import { TbCalendarStats } from "react-icons/tb";
 import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { formatInTimeZone } from "date-fns-tz";
+import { useUpdateScheduleItemStatus } from "@/react-query/mutations";
 
 type Props = {
   schedules: UserPlan;
+  onItemStatusUpdate: () => void;
 };
-export default function PlanCalendarView({ schedules }: Props) {
+export default function PlanCalendarView({
+  schedules,
+  onItemStatusUpdate,
+}: Props) {
   const today = new Date();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(
-    differenceInCalendarDays(today, schedules.startDate)
+    isBefore(today, schedules.startDate)
+      ? 0
+      : differenceInCalendarDays(today, schedules.startDate)
   );
   const [selectedDate, setSelectedDate] = useState(current);
+  const handleStatusChange = useUpdateScheduleItemStatus();
+
+  function onChangeGoalStatus(
+    scheduleId: string,
+    goalIndex: number,
+    checked: boolean
+  ) {
+    const items = schedules.schedules[selectedDate];
+    items.items[goalIndex].status = checked ? "COMPLETED" : "PENDING";
+
+    handleStatusChange.mutate({
+      scheduleId,
+      items,
+    });
+
+    // if all the items in that day are complete, scroll to the next day
+    // const complete = items.items?.every((item) => item.status === "COMPLETED");
+    // if (complete) {
+    //   setSelectedDate(current + 1);
+    // }
+    //don't think nice for UX but keep it anyway
+
+    onItemStatusUpdate();
+  }
 
   useEffect(() => {
     if (!api) {
       return;
     }
 
-    api.scrollTo(current); // Scroll to 4th (index is 0-based)
+    api.scrollTo(current);
 
     setCurrent(api.selectedScrollSnap());
 
@@ -59,15 +88,18 @@ export default function PlanCalendarView({ schedules }: Props) {
         }}
         setApi={setApi}
       >
+        {isBefore(today, schedules.startDate) && (
+          <div className='border px-2 py-3 mb-8 rounded-sm mt-3 text-sm flex items-center gap-2'>
+            <span className='w-1/4 text-center text-xl'>⚠️</span>{" "}
+            <span>
+              This plan is yet to start, take a look at it but you will start it
+              on {format(schedules.startDate, "dd/MM/Y")}
+            </span>
+          </div>
+        )}
         <CarouselContent className='ml-1 w-[150px] xs:w-[280px]'>
           {schedules.schedules.map((schedule, index) => {
-            // const parsedDate = formatInTimeZone(
-            //   schedule.date,
-            //   "UTC",
-            //   "yyyy-MM-dd"
-            // ); // Keep it in UTC
             const parsedDate = schedule.date;
-
             return (
               <CarouselItem
                 key={index}
@@ -106,24 +138,43 @@ export default function PlanCalendarView({ schedules }: Props) {
       </Carousel>
       <Separator className='my-5' />
       <div className='space-y-2'>
-        {schedules.schedules[selectedDate].items.map((item) => (
-          <CalendarViewItem key={item.goal} item={item} />
+        {schedules.schedules[selectedDate].items.map((item, index) => (
+          <CalendarViewItem
+            key={item.goal}
+            scheduleId={schedules.schedules[selectedDate].id}
+            index={index}
+            item={item}
+            onChange={onChangeGoalStatus}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function CalendarViewItem({ item }: { item: ScheduleItem }) {
+function CalendarViewItem({
+  item,
+  onChange,
+  scheduleId,
+  index,
+}: {
+  item: ScheduleItem;
+  index: number;
+  scheduleId: string;
+  onChange: (scheduleId: string, goalIndex: number, checked: boolean) => void;
+}) {
   return (
     <div className='flex gap-2 items-center'>
       <Input
         defaultChecked={item.status === "COMPLETED"}
-        id='completed'
+        id={item.goal}
         type='checkbox'
         className='size-4 checked:bg-primary'
+        onChange={(e) => {
+          onChange(scheduleId, index, e.target.checked);
+        }}
       />
-      <Label htmlFor='completed' className='text-sm'>
+      <Label htmlFor={item.goal} className='text-sm'>
         {item.goal}
       </Label>
     </div>
