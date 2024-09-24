@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA, type VitePWAOptions } from "vite-plugin-pwa";
 
-const manifestForPlugIn: VitePWAOptions = {
+const manifestForPlugIn: Partial<VitePWAOptions> = {
   registerType: "prompt",
   includeAssets: ["vite.svg"],
   manifest: {
@@ -28,7 +28,7 @@ const manifestForPlugIn: VitePWAOptions = {
 };
 
 export default defineConfig({
-  plugins: [react(), VitePWA(manifestForPlugIn)],
+  plugins: [react(), VitePWA({ registerType: "autoUpdate" })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
