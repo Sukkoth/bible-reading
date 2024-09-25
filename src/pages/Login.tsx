@@ -45,7 +45,7 @@ function Login() {
     await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: import.meta.env.VITE_APP_URL,
+        redirectTo: import.meta.env.VITE_AUTH_CALLBACK,
       },
     });
   }
