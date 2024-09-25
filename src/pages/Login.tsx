@@ -41,14 +41,14 @@ function Login() {
       },
     });
   }
-  async function handleLoginGithub() {
-    await supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: import.meta.env.VITE_AUTH_CALLBACK,
-      },
-    });
-  }
+  // async function handleLoginGithub() {
+  //   await supabase.auth.signInWithOAuth({
+  //     provider: "github",
+  //     options: {
+  //       redirectTo: import.meta.env.VITE_AUTH_CALLBACK,
+  //     },
+  //   });
+  // }
 
   useEffect(() => {
     if (user) {
@@ -132,14 +132,14 @@ function Login() {
         </CardHeader>
         <CardContent>
           <div className='space-y-5'>
-            <Button
+            {/* <Button
               variant={"outline"}
               className='w-full'
               size='lg'
               onClick={handleLoginGithub}
             >
               <GitHubLogoIcon className='mr-2 h-4 w-4' /> Github
-            </Button>
+            </Button> */}
             <Button
               variant={"outline"}
               className='w-full'
