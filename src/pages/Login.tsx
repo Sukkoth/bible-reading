@@ -36,6 +36,9 @@ function Login() {
   async function handleLoginGoogle() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: import.meta.env.VITE_APP_URL,
+      },
     });
   }
 
