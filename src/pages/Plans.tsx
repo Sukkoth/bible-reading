@@ -18,7 +18,7 @@ function Plans() {
     <div>
       <BackButton />
       <div className='pt-5'>
-        <h1 className='text-3xl'>Your Plans</h1>
+        <h1 className='text-sm xxs:text-xl xs:text-2xl'>Your Plans</h1>
       </div>
       <div>
         {plans?.data?.map((plan, index) => {

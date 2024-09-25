@@ -107,7 +107,7 @@ function Plan() {
             />
           </div>
         </CardHeader>
-        <CardContent className='overflow-hidden'>
+        <CardContent className='overflow-hidden px-3 sm:px-6'>
           <div className='grid grid-cols-1  xxs:grid-cols-2 xs:grid-cols-3 gap-2'>
             {planDetail.map((detail) => (
               <PlanDetailItem {...detail} key={detail.header} />
@@ -139,7 +139,7 @@ export function PlanLoader() {
       <div className='pt-5'>
         <Skeleton className='w-1/3 h-12' />
       </div>
-      <div className='mt-6 min-h-[75dvh] border rounded-2xl p-5 px-8 bg-card'>
+      <div className='mt-6 min-h-[75dvh] border rounded-2xl p-5 px-3 sm:px-6 bg-card'>
         <Skeleton className='size-40 mx-auto rounded-full full' />
         <div className='mt-6 grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 gap-2'>
           <Skeleton className='h-24' />
@@ -159,10 +159,7 @@ export function PlanLoader() {
           </div>
         </div>
         <Separator className='my-5' />
-        <div className='space-y-2'>
-          <div className='flex gap-2'>
-            <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
-          </div>
+        <div className='space-y-3'>
           <div className='flex gap-2'>
             <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
           </div>
@@ -173,6 +170,8 @@ export function PlanLoader() {
             <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
           </div>
         </div>
+        <Separator className='my-5' />
+        <Skeleton className='w-full h-12 mt-2' />
       </div>
     </div>
   );

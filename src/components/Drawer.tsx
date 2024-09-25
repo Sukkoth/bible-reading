@@ -77,7 +77,7 @@ const drawerItems = [
   {
     icon: <BiBook />,
     label: "My Plans",
-    to: "/plans/all",
+    to: "/plans",
   },
   {
     icon: <CgProfile />,

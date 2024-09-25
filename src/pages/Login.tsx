@@ -41,6 +41,14 @@ function Login() {
       },
     });
   }
+  async function handleLoginGithub() {
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: import.meta.env.VITE_APP_URL,
+      },
+    });
+  }
 
   useEffect(() => {
     if (user) {
@@ -54,7 +62,9 @@ function Login() {
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
       <Card className='mx-5 w-full bg-transparent'>
         <CardHeader>
-          <CardTitle className='text-3xl'>Login to your account</CardTitle>
+          <CardTitle className='text-xl xxs:text-2xl xs:text-3xl'>
+            Login to your account
+          </CardTitle>
           <CardDescription>
             Enter your email to login to your account
           </CardDescription>
@@ -122,7 +132,12 @@ function Login() {
         </CardHeader>
         <CardContent>
           <div className='space-y-5'>
-            <Button variant={"outline"} className='w-full' size='lg'>
+            <Button
+              variant={"outline"}
+              className='w-full'
+              size='lg'
+              onClick={handleLoginGithub}
+            >
               <GitHubLogoIcon className='mr-2 h-4 w-4' /> Github
             </Button>
             <Button

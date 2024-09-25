@@ -32,8 +32,10 @@ function Home() {
       >
         <div className='pt-5 flex justify-between'>
           <div>
-            <h1 className='text-3xl'>Hello</h1>
-            <h1 className='text-3xl'>{profile?.first_name?.split(" ")[0]}👋</h1>
+            <h1 className='text-xl xxs:text-2xl xs:text-3xl'>Hello</h1>
+            <h1 className='text-xl xxs:text-2xl xs:text-3xl'>
+              {profile?.first_name?.split(" ")[0]}👋
+            </h1>
             <span className='text-xs'>{new Date().toDateString()}</span>
           </div>
           <div
@@ -61,8 +63,8 @@ function Home() {
           </Button>
         </div>
         <div className='mt-10'>
-          <h1 className='text-2xl'>December, 2023</h1>
-          <div className='grid grid-cols-8 gap-2 pt-3'>
+          <h1 className='text-sm xxs:text-xl xs:text-2xl'>December, 2023</h1>
+          <div className='grid grid-cols-4 xxs:grid-cols-6 xs:grid-cols-8 gap-2 pt-3'>
             {Array.from(
               { length: DATE_UTILS.getDaysInCurrentMonth() },
               (_, i) => (
@@ -76,7 +78,7 @@ function Home() {
         </div>
         <div className='mt-10'>
           <div className='w-full flex justify-between items-center'>
-            <h1 className='text-2xl'>Today's plans</h1>
+            <h1 className='text-sm xxs:text-xl xs:text-2xl'>Today's plans</h1>
             <Link
               to='plans'
               className='text-stone-400 text-xs hover:underline cursor-pointer'
@@ -117,30 +119,30 @@ function HomeLoader() {
       <div className='flex justify-between mt-5'>
         <div className='w-full'>
           <Skeleton className='w-1/2 h-20' />
-          <Skeleton className='w-1/2 h-5 mt-3' />
+          <Skeleton className='w-1/2 h-2 mt-1' />
         </div>
         <div>
           <Skeleton className='size-10' />
         </div>
       </div>
       <div className='mt-5 space-y-2'>
-        <Skeleton className='w-full h-12 rounded-3xl' />
-        <Skeleton className='w-full h-12 rounded-3xl' />
+        <Skeleton className='w-full h-10 rounded-3xl' />
+        <Skeleton className='w-full h-10 rounded-3xl' />
       </div>
-      <div className='mt-10'>
-        <Skeleton className='w-1/2 h-11' />
-        <div className='grid grid-cols-8 gap-2 pt-3'>
+      <div className='mt-12'>
+        <Skeleton className='w-1/2 h-8' />
+        <div className='grid grid-cols-4 xxs:grid-cols-6 xs:grid-cols-8 gap-2 pt-2'>
           {Array.from({ length: 30 }, (_, index) => (
-            <Skeleton className='size-12 rounded-full' key={index} />
+            <Skeleton className='size-[53px] rounded-full' key={index} />
           ))}
         </div>
       </div>
-      <div className='mt-10'>
+      <div className='mt-14'>
         <div className='pt-5 flex justify-between items-end'>
           <Skeleton className='w-1/3 h-8' />
           <Skeleton className='w-20 h-5 mt-3' />
         </div>
-        <div className='pt-2'>
+        <div className=''>
           <Skeleton className='my-3 h-16 rounded-xl border' />
           <Skeleton className='my-3 h-16 rounded-xl border' />
         </div>

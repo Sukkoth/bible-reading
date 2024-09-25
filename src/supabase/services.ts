@@ -2,6 +2,7 @@ import { LoginSchemaType } from "@/schemas/authSchema";
 import supabase from ".";
 import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
 import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
+import { format } from "date-fns";
 
 export async function GET_USER() {
   const { data, error } = await supabase.auth.getUser();
@@ -201,7 +202,7 @@ export async function GET_TODAYS_PLANS(userId: string) {
     .from("userPlans")
     .select("*, plans(*), schedules(*)")
     .eq("userId", userId)
-    .eq("schedules.date", new Date().toLocaleDateString());
+    .eq("schedules.date", new Date().toLocaleDateString().split("/").join("-"));
 
   if (error) {
     throw new Error(error.message || "Something went wrong");

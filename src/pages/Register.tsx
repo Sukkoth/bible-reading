@@ -36,7 +36,9 @@ function Register() {
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
       <Card className='mx-5 w-full bg-transparent'>
         <CardHeader>
-          <CardTitle className='text-3xl'>Create your new account</CardTitle>
+          <CardTitle className='text-xl xxs:text-2xl xs:text-3xl'>
+            Create your new account
+          </CardTitle>
           <CardDescription>
             Enter your email to create your account
           </CardDescription>
@@ -95,9 +97,9 @@ function Register() {
         </CardHeader>
         <CardContent>
           <div className='space-y-5'>
-            <Button variant={"outline"} className='w-full' size='lg'>
+            {/* <Button variant={"outline"} className='w-full' size='lg'>
               <GitHubLogoIcon className='mr-2 h-4 w-4' /> Github
-            </Button>
+            </Button> */}
             <Button variant={"outline"} className='w-full' size='lg'>
               <FcGoogle className='mr-2 h-4 w-4' /> Google
             </Button>

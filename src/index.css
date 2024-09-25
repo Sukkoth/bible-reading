@@ -106,7 +106,7 @@ body {
     var(--skeleton-from) 100%
   );
   background-size: 200% 100%;
-  animation: skeletonWave 2.5s ease-in-out infinite;
+  animation: skeletonWave 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 :root {
