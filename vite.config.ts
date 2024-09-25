@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       manifest: {
         name: "Bible Reader",
-        short_name: "bible-reader-app",
+        short_name: "Bible Reader",
         description: "A nice tool to help you read your bible consistently",
         theme_color: "#171717",
         icons: [
