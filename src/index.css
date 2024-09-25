@@ -88,3 +88,33 @@ body {
 .spin-loader {
   animation: spin 3s linear infinite;
 }
+
+@keyframes skeletonWave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-from) 0%,
+    var(--skeleton-to) 50%,
+    var(--skeleton-from) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonWave 2.5s ease-in-out infinite;
+}
+
+:root {
+  --skeleton-from: rgba(0, 0, 0, 0.03);
+  --skeleton-to: rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --skeleton-from: rgba(255, 255, 255, 0.089);
+  --skeleton-to: rgba(255, 255, 255, 0.162);
+}

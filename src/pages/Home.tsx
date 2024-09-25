@@ -10,6 +10,7 @@ import { useAuth } from "@/Providers/AuthProvider";
 import { useState } from "react";
 import Drawer from "@/components/Drawer";
 import { useGetTodaysPlans } from "@/react-query/queries";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Home() {
   const navigate = useNavigate();
@@ -17,10 +18,10 @@ function Home() {
   const [showDrawer, setShowDrawer] = useState(false);
   const todaysPlans = useGetTodaysPlans();
 
-  console.log(todaysPlans?.data);
-
   return user?.id && (!profile || !profile?.first_name) ? (
     <Navigate to={"/complete-profile"} replace />
+  ) : todaysPlans.isPending ? (
+    <HomeLoader />
   ) : (
     <div className='relative overflow-hidden'>
       <Drawer show={showDrawer} onClose={() => setShowDrawer(false)} />
@@ -110,8 +111,40 @@ function Home() {
 
 export default Home;
 
-//logout
-//theme
-//profile
-//settings
-//
+function HomeLoader() {
+  return (
+    <div>
+      <div className='flex justify-between mt-5'>
+        <div className='w-full'>
+          <Skeleton className='w-1/2 h-20' />
+          <Skeleton className='w-1/2 h-5 mt-3' />
+        </div>
+        <div>
+          <Skeleton className='size-10' />
+        </div>
+      </div>
+      <div className='mt-5 space-y-2'>
+        <Skeleton className='w-full h-12 rounded-3xl' />
+        <Skeleton className='w-full h-12 rounded-3xl' />
+      </div>
+      <div className='mt-10'>
+        <Skeleton className='w-1/2 h-11' />
+        <div className='grid grid-cols-8 gap-2 pt-3'>
+          {Array.from({ length: 30 }, (_, index) => (
+            <Skeleton className='size-12 rounded-full' key={index} />
+          ))}
+        </div>
+      </div>
+      <div className='mt-10'>
+        <div className='pt-5 flex justify-between items-end'>
+          <Skeleton className='w-1/3 h-8' />
+          <Skeleton className='w-20 h-5 mt-3' />
+        </div>
+        <div className='pt-2'>
+          <Skeleton className='my-3 h-16 rounded-xl border' />
+          <Skeleton className='my-3 h-16 rounded-xl border' />
+        </div>
+      </div>
+    </div>
+  );
+}
