@@ -30,9 +30,7 @@ function NewPlanItem({
       <div className='w-full pe-5'>
         <div>
           <h3>{title}</h3>
-          <p className='text-xs text-stone-400 pt-1 line-clamp-3'>
-            {description}
-          </p>
+          <p className='text-xs pt-1 line-clamp-3'>{description}</p>
           <Separator className='my-3' />
           <div className='flex items-center justify-between'>
             <div className='rounded-lg p-1 flex gap-2'>
