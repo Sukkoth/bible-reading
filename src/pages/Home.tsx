@@ -133,12 +133,15 @@ function HomeLoader() {
         <Skeleton className='w-1/2 h-8' />
         <div className='grid grid-cols-4 xxs:grid-cols-6 xs:grid-cols-8 gap-2 pt-2'>
           {Array.from({ length: 30 }, (_, index) => (
-            <Skeleton className='size-[53px] rounded-full' key={index} />
+            <Skeleton
+              className='size-[45px] sm:size-[53px] rounded-full'
+              key={index}
+            />
           ))}
         </div>
       </div>
-      <div className='mt-14'>
-        <div className='pt-5 flex justify-between items-end'>
+      <div className='mt-12'>
+        <div className='pt-2 flex justify-between items-end'>
           <Skeleton className='w-1/3 h-8' />
           <Skeleton className='w-20 h-5 mt-3' />
         </div>

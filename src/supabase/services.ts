@@ -2,7 +2,6 @@ import { LoginSchemaType } from "@/schemas/authSchema";
 import supabase from ".";
 import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
 import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
-import { format } from "date-fns";
 
 export async function GET_USER() {
   const { data, error } = await supabase.auth.getUser();
@@ -70,8 +69,6 @@ export async function UPDATE_PROFILE(
     .upsert(dataToUpdate)
     .select()
     .single();
-
-  console.log("UPSERT DATA", data, "Error", error);
 
   if (error || !data.length) {
     throw new Error(error?.message || "Something went wrong");
@@ -202,7 +199,7 @@ export async function GET_TODAYS_PLANS(userId: string) {
     .from("userPlans")
     .select("*, plans(*), schedules(*)")
     .eq("userId", userId)
-    .eq("schedules.date", new Date().toLocaleDateString().split("/").join("-"));
+    .eq("schedules.date", new Date().toISOString().split("T")[0]);
 
   if (error) {
     throw new Error(error.message || "Something went wrong");
