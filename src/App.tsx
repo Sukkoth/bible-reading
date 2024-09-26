@@ -24,14 +24,6 @@ function App() {
     if (data && data.user) {
       handleSetAuth(data.user, data.profile);
     }
-    if (navigator.setAppBadge) {
-      // The API is supported, use it.
-      console.log("Supported");
-      navigator.setAppBadge(3);
-    } else {
-      // The API is not supported, don't use it.
-      console.log("Supported NOT");
-    }
   }, [data, handleSetAuth]);
 
   if (isPending) {

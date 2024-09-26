@@ -2,9 +2,25 @@ import BackButton from "@/components/BackButton";
 import PlansItem from "@/components/PlansItem";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetPlans } from "@/react-query/queries";
+import { useEffect, useState } from "react";
 
 function Plans() {
   const plans = useGetPlans();
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (navigator.setAppBadge) {
+      // The API is supported, use it.
+      console.log("Supported");
+      navigator
+        .setAppBadge(3)
+        .then(() => setMessage("set it"))
+        .catch((e) => setMessage("Could not set it"));
+    } else {
+      // The API is not supported, don't use it.
+      console.log("Supported NOT");
+    }
+  }, []);
 
   if (plans.isPending) {
     return <PlansLoader />;
@@ -19,6 +35,7 @@ function Plans() {
       <BackButton />
       <div className='pt-5'>
         <h1 className='text-sm xxs:text-xl xs:text-2xl'>Your Plans</h1>
+        <span>{message}</span>
       </div>
       <div>
         {plans?.data?.map((plan, index) => {
