@@ -5,18 +5,43 @@ import * as DATE_UTILS from "@/utils/date-utils";
 import CalendarStatItem from "@/components/CalendarStatItem";
 import PlansItem from "@/components/PlansItem";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { plansData } from "@/data";
 import { useAuth } from "@/Providers/AuthProvider";
 import { useState } from "react";
 import Drawer from "@/components/Drawer";
-import { useGetTodaysPlans } from "@/react-query/queries";
+import {
+  useGetMonthlyPlanStats,
+  useGetTodaysPlans,
+} from "@/react-query/queries";
 import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 function Home() {
   const navigate = useNavigate();
   const { profile, user } = useAuth();
   const [showDrawer, setShowDrawer] = useState(false);
   const todaysPlans = useGetTodaysPlans();
+  const monthStats = useGetMonthlyPlanStats();
+  const toBeMapped: { [key: string]: any } = {};
+  let mapped = [];
+
+  if (monthStats.data) {
+    const data = monthStats.data.map((item) => item.schedules).flat(1);
+    data.forEach((schedule) => {
+      if (toBeMapped[schedule.date]) {
+        toBeMapped[schedule.date].items = [
+          ...toBeMapped[schedule.date].items,
+          ...schedule.items,
+        ];
+      } else {
+        toBeMapped[schedule.date] = {
+          index: parseInt(schedule.date.split("-")[2]),
+          date: schedule.date,
+          items: schedule.items,
+        };
+      }
+    });
+    mapped = Object.values(toBeMapped);
+  }
 
   return user?.id && (!profile || !profile?.first_name) ? (
     <Navigate to={"/complete-profile"} replace />
@@ -63,13 +88,40 @@ function Home() {
           </Button>
         </div>
         <div className='mt-10'>
-          <h1 className='text-sm xxs:text-xl xs:text-2xl'>December, 2023</h1>
+          <h1 className='text-sm xxs:text-xl xs:text-2xl'>
+            {format(new Date(), "MMMM, y")}
+          </h1>
           <div className='grid grid-cols-4 xxs:grid-cols-6 xs:grid-cols-8 gap-2 pt-3'>
             {Array.from(
               { length: DATE_UTILS.getDaysInCurrentMonth() },
-              (_, i) => (
-                <CalendarStatItem {...plansData[i]} text={i + 1} key={i} />
-              )
+              (_, index) => {
+                const dailyData = mapped.filter(
+                  (data) => data.index === index + 1
+                );
+
+                const target = dailyData?.[0]?.items?.length;
+                const progress = dailyData?.[0]?.items?.filter(
+                  (daily: ScheduleItem) => daily.status === "COMPLETED"
+                ).length;
+
+                if (index === 25) {
+                  console.log({
+                    dailyData,
+                    target,
+                    progress,
+                    index: index + 1,
+                  });
+                }
+                return (
+                  <CalendarStatItem
+                    target={target}
+                    progress={progress}
+                    type='h'
+                    text={index + 1}
+                    key={index}
+                  />
+                );
+              }
             )}
           </div>
           <p className='pt-2'>

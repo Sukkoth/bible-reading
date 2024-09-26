@@ -2,6 +2,7 @@ import { LoginSchemaType } from "@/schemas/authSchema";
 import supabase from ".";
 import { CompleteProfileSchemaType } from "@/schemas/completeProfileSchema";
 import { CreatePlanSchemaType } from "@/schemas/createPlanSchema";
+import { format } from "date-fns";
 
 export async function GET_USER() {
   const { data, error } = await supabase.auth.getUser();
@@ -120,10 +121,18 @@ export async function CREATE_PLAN_SCHEDULE(
   formData: CreatePlanSchedule,
   userId: string
 ) {
+  //remove the time zones from start and end dates
+  //or else you will be getting different values for the startDate and
+  //the first item in the schedules (mostly 1 date difference)
   const { schedules, ...otherData } = formData;
   const { data, error } = await supabase
     .from("userPlans")
-    .insert({ ...otherData, userId })
+    .insert({
+      ...otherData,
+      startDate: format(otherData.startDate, "yyyy-MM-dd HH:mm:ss"),
+      endDate: format(otherData.endDate, "yyyy-MM-dd HH:mm:ss"),
+      userId,
+    })
     .select()
     .single();
 
@@ -199,7 +208,8 @@ export async function GET_TODAYS_PLANS(userId: string) {
     .from("userPlans")
     .select("*, plans(*), schedules(*)")
     .eq("userId", userId)
-    .eq("schedules.date", new Date().toISOString().split("T")[0]);
+    // .eq("schedules.date", "2024-09-27");
+    .eq("schedules.date", format(new Date(), "yyyy-MM-dd"));
 
   if (error) {
     throw new Error(error.message || "Something went wrong");
@@ -221,4 +231,32 @@ export async function GET_TEMPLATES() {
   }
 
   return data;
+}
+
+export async function GET_CURRENT_MONTH_DAILY_PROGRESS(userId: string) {
+  const { data, error } = await supabase
+    .from("userPlans")
+    .select("schedules(*)")
+    .eq("userId", userId)
+    .filter(
+      "schedules.date",
+      "gte",
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+    )
+    .filter(
+      "schedules.date",
+      "lte",
+      new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        1
+      ).toISOString()
+    )
+    .order("date", { ascending: true, referencedTable: "schedules" });
+
+  if (error) {
+    throw new Error(error?.message || "Something went wrong");
+  }
+
+  return data as { schedules: Schedule[] }[];
 }

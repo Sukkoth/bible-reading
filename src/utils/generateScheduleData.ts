@@ -47,10 +47,7 @@ export function GenerateScheduleDataForDb({
 
   for (let i = 0; i < booksWithChapters.length; i += chapterCount) {
     plan.push({
-      date: format(
-        addDays(startDate!, i / chapterCount),
-        "yyyy-MM-dd HH:mm:ss"
-      ),
+      date: format(addDays(startDate!, i), "yyyy-MM-dd HH:mm:ss"),
       items: booksWithChapters.slice(i, i + chapterCount),
     });
   }

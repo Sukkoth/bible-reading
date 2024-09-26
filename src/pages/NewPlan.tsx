@@ -1,6 +1,4 @@
 import BackButton from "@/components/BackButton";
-import NewPlanItem from "@/components/NewPlanItem";
-import { newPlansData } from "@/data";
 
 function NewPlan() {
   return (
@@ -10,9 +8,7 @@ function NewPlan() {
         <h1 className='text-3xl'>Popular Plans</h1>
       </div>
       <div>
-        {newPlansData.map((plan) => (
-          <NewPlanItem {...plan} key={plan.title} />
-        ))}
+        <h1>COMING SOON</h1>
       </div>
     </div>
   );
