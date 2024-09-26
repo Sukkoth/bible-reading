@@ -2,6 +2,7 @@ import { useAuth } from "@/Providers/AuthProvider";
 import {
   GET_PLAN_SCHEDULE,
   GET_PLANS,
+  GET_TEMPLATES,
   GET_TODAYS_PLANS,
   GET_USER,
 } from "@/supabase/services";
@@ -35,5 +36,12 @@ export function useGetTodaysPlans() {
   return useQuery({
     queryKey: ["today'sPlans"],
     queryFn: () => GET_TODAYS_PLANS(user!.id),
+  });
+}
+
+export function useGetTemplates() {
+  return useQuery({
+    queryFn: GET_TEMPLATES,
+    queryKey: ["templates"],
   });
 }

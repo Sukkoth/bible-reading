@@ -1,7 +1,7 @@
 import BackButton from "@/components/BackButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { books } from "@/assets/bible_books_list";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -33,13 +33,19 @@ import type { CreatePlanSchedule } from "@/supabase/services";
 import { GenerateScheduleDataForDb } from "@/utils/generateScheduleData";
 
 function CreatePlanSchedule() {
+  const [searchParams] = useSearchParams();
+
   const { planId } = useParams();
-  const selectionRef = useRef<string[]>([]); //to not re-render expensive list of bible books
+  const selectionRef = useRef<string[]>(
+    JSON.parse(searchParams.get("books") || "[]")
+  ); //to not re-render expensive list of bible books
   const [selected, setSelected] = useState<string[]>([]);
   const [showTime, setShowTime] = useState(false);
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [chapterCount, setChapterCount] = useState(1);
+  const [chapterCount, setChapterCount] = useState(
+    parseInt(searchParams.get("perDay") || "1")
+  );
 
   const handleAddPlanToDb = useCreatePlanSchedule();
 
@@ -108,7 +114,7 @@ function CreatePlanSchedule() {
                 )}
                 <div className='py-3 px-3 flex gap-2 text-lg hover:bg-secondary'>
                   <Input
-                    defaultChecked={selected.includes(book.book)}
+                    defaultChecked={selectionRef.current.includes(book.book)}
                     type='checkbox'
                     id={book.book}
                     className='h-4 w-fit cursor-pointer'
@@ -140,7 +146,7 @@ function CreatePlanSchedule() {
             onClick={() => {
               handleSelected();
               setStartDate(new Date());
-              setChapterCount(1);
+              setChapterCount(parseInt(searchParams.get("perDay") || "1"));
             }}
           >
             Select Marked

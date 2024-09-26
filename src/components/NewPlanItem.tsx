@@ -8,11 +8,18 @@ type Props = {
   title: string;
   description: string;
   quantifier: string;
+  queryParam?: string;
 };
-function NewPlanItem({ duration, title, description, quantifier }: Props) {
+function NewPlanItem({
+  duration,
+  title,
+  description,
+  quantifier,
+  queryParam,
+}: Props) {
   return (
     <Link
-      to={"/"}
+      to={`/plans/create/schedule/${queryParam}`}
       className='border my-3 border-stone-700 hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
     >
       <img
@@ -35,7 +42,10 @@ function NewPlanItem({ duration, title, description, quantifier }: Props) {
             <Separator orientation='vertical' className='h-[1rem]' />
             <div className='text-xs flex items-center gap-2'>
               <IoBookOutline />
-              {quantifier}
+              <p className='text-xs text-center'>
+                {" "}
+                {quantifier} session{parseInt(quantifier) > 1 ? "s" : ""}/day
+              </p>
             </div>
           </div>
         </div>

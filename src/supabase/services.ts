@@ -209,3 +209,16 @@ export async function GET_TODAYS_PLANS(userId: string) {
     (dataItem) => dataItem.schedules.length > 0
   );
 }
+
+//* TEMPLATES
+export async function GET_TEMPLATES() {
+  const { data, error } = await supabase
+    .from("templates")
+    .select("*, plans(*)");
+
+  if (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+
+  return data;
+}
