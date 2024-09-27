@@ -13,6 +13,7 @@ export function useGetUser() {
   return useQuery({
     queryKey: ["authUser"],
     queryFn: GET_USER,
+    staleTime: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 }
 
