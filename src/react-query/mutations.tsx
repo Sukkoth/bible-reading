@@ -93,9 +93,15 @@ export function useCreatePlanSchedule() {
 }
 
 export function useUpdateScheduleItemStatus() {
+const queryClient = useQueryClient();
   return useMutation({
     mutationFn(data: MarkPlanGoalData) {
       return UPDATE_SCHEDULE_ITEM_STATUS(data);
     },
+    onSuccess: () => {
+      // Invalidate 'month-stats' and 'today'sPlans' queries
+      queryClient.invalidateQueries({ queryKey: ["month-stats"]});
+      queryClient.invalidateQueries({ queryKey: ["today'sPlans"]});
+    }
   });
 }
