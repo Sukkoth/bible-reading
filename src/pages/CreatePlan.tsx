@@ -74,6 +74,7 @@ function CreatePlan() {
                     quantifier={template.schedules.perDay}
                     duration={template.plans.suggestedDuration}
                     key={template.id}
+                    img={template.plans.coverImg}
                   />
                 );
               })}

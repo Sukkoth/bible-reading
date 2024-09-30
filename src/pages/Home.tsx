@@ -14,6 +14,9 @@ import {
 } from "@/react-query/queries";
 import { format } from "date-fns";
 import HomeLoader from "@/loaders/HomeLoader";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator";
 
 function Home() {
   const navigate = useNavigate();
@@ -116,13 +119,14 @@ function Home() {
               }
             )}
           </div>
-          <p className='pt-2'>
+          {/* <p className='pt-2'>
             <span className='text-primary'>+3.2%</span> from last month
-          </p>
+          </p> */}
         </div>
         <div className='mt-10'>
           <div className='w-full flex justify-between items-center'>
             <h1 className='text-sm xxs:text-xl xs:text-2xl'>Today's plans</h1>
+
             <Link
               to='plans'
               className='text-stone-400 text-xs hover:underline cursor-pointer'
@@ -130,25 +134,31 @@ function Home() {
               View all
             </Link>
           </div>
-          {todaysPlans.data?.length
-            ? todaysPlans.data.map((plan) => {
-                const target = plan.schedules[0].items.length;
-                const progress = plan.schedules[0].items.filter(
-                  (item) => item.status === "COMPLETED"
-                ).length;
-                return (
-                  <PlansItem
-                    key={plan.id}
-                    target={target}
-                    progress={progress}
-                    type='Chapters'
-                    text={plan.plans.name}
-                    subText={`${progress}/${target} Chapters`}
-                    to={`/plans/${plan.id}`}
-                  />
-                );
-              })
-            : "You got no plans for today"}
+          {todaysPlans.data?.length ? (
+            todaysPlans.data.map((plan) => {
+              const target = plan.schedules[0].items.length;
+              const progress = plan.schedules[0].items.filter(
+                (item) => item.status === "COMPLETED"
+              ).length;
+              return (
+                <PlansItem
+                  key={plan.id}
+                  target={target}
+                  progress={progress}
+                  type='Chapters'
+                  text={plan.plans.name}
+                  subText={`${progress}/${target} Chapters`}
+                  to={`/plans/${plan.id}`}
+                />
+              );
+            })
+          ) : (
+            <Alert className='mt-5 shadow-md'>
+              <ExclamationTriangleIcon className='h-4 w-4 animate-pulse' />
+              <AlertTitle className='font-bold'>No plans</AlertTitle>
+              <AlertDescription>You got no plans for today</AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </div>

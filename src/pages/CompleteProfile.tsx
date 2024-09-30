@@ -19,9 +19,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BiLoader } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 export default function CompleteProfile() {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, profile } = useAuth();
   const [, setGender] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false); //for file
@@ -79,6 +81,16 @@ export default function CompleteProfile() {
     setUploading(false);
   };
 
+  const hasCompletedProfile =
+    profile?.first_name &&
+    profile.last_name &&
+    profile.gender &&
+    profile.avatar;
+
+  useEffect(() => {
+    if (hasCompletedProfile) navigate(-1);
+  }, []);
+
   useEffect(() => {
     if (user?.user_metadata?.avatar_url) {
       setValue("avatar", user?.user_metadata.avatar_url);
@@ -92,7 +104,16 @@ export default function CompleteProfile() {
         setValue("lastName", user?.user_metadata.full_name.split(" ")[1]);
       }
     }
+
+    if (profile?.gender) {
+      setGender(profile.gender === "male" ? "male" : "female");
+      setValue("gender", profile.gender === "male" ? "male" : "female");
+    }
   }, [user?.id]);
+
+  if (hasCompletedProfile || !user) {
+    return;
+  }
 
   return (
     <div className='flex flex-col h-full flex-grow items-center justify-center'>
