@@ -8,7 +8,7 @@ function BackButton() {
     <Button
       variant={"outline"}
       size={"icon"}
-      className='size-10'
+      className='size-10 shadow-none'
       onClick={() => navigate(-1)}
     >
       <ChevronLeft />

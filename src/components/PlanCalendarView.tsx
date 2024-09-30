@@ -16,9 +16,9 @@ import {
 import { useEffect, useState } from "react";
 import { TbCalendarStats } from "react-icons/tb";
 import { Separator } from "./ui/separator";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useUpdateScheduleItemStatus } from "@/react-query/mutations";
+import { Checkbox } from "./ui/checkbox";
 
 type Props = {
   schedules: UserPlan;
@@ -115,7 +115,7 @@ export default function PlanCalendarView({
                 <Card
                   className={`rounded-none shadow-none text-secondary-foreground  ${
                     isSameDay(parsedDate, today)
-                      ? `bg-primary hover:bg-primary/90`
+                      ? `bg-primary hover:bg-primary/90 text-white`
                       : `bg-secondary`
                   } border-none`}
                 >
@@ -165,14 +165,13 @@ function CalendarViewItem({
 }) {
   return (
     <div className='flex gap-2 items-center'>
-      <Input
-        defaultChecked={item.status === "COMPLETED"}
+      <Checkbox
         id={item.goal}
-        type='checkbox'
-        className='size-4 checked:bg-primary'
-        onChange={(e) => {
-          onChange(scheduleId, index, e.target.checked);
-        }}
+        className='checked:bg-secondary'
+        defaultChecked={item.status === "COMPLETED"}
+        onCheckedChange={(checked) =>
+          onChange(scheduleId, index, Boolean(checked))
+        }
       />
       <Label htmlFor={item.goal} className='text-sm'>
         {item.goal}

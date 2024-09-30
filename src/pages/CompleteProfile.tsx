@@ -26,7 +26,7 @@ export default function CompleteProfile() {
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false); //for file
   const handleCompleteProfile = useCompleteProfile();
-  console.log({ user, profile });
+
   const {
     register,
     handleSubmit,
@@ -61,8 +61,6 @@ export default function CompleteProfile() {
           upsert: false,
         }
       );
-
-    console.log("Upload data", { data });
 
     if (!error && data?.fullPath) {
       clearErrors("avatar");

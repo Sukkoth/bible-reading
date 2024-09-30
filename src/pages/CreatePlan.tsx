@@ -5,19 +5,34 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetTemplates } from "@/react-query/queries";
-import { PlusIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { BiGlasses } from "react-icons/bi";
+import { AiOutlineAlert } from "react-icons/ai";
+import { cn } from "@/lib/utils";
 
 function CreatePlan() {
   const [showCreatePlanForm, setShowCreatePlanForm] = useState(false);
   const loadTemplates = useGetTemplates();
+  const [showTemplates, setShowTemplates] = useState(false);
 
   return loadTemplates.isPending ? (
     <CreatePlanLoader />
   ) : (
     <div>
       <BackButton />
+      <div className='text-sm border p-3 rounded-md mt-5 text-stone-500 dark:text-stone-300 flex gap-8 items-center'>
+        <div className='text-2xl animate-pulse text-primary'>
+          <AiOutlineAlert />
+        </div>
+        <p>
+          <strong className='text-primary'>Create a plan</strong> of your own or
+          pick from the given{" "}
+          <strong className='text-primary'>templates</strong>. Then you will
+          move on to <strong className='text-primary'>create a schedule</strong>{" "}
+          for your plan.
+        </p>
+      </div>
       <div className='pt-5'>
         <Button
           variant={!showCreatePlanForm ? "default" : "outline"}
@@ -38,10 +53,10 @@ function CreatePlan() {
         {!showCreatePlanForm && (
           <>
             <h1 className='text-3xl'>Templates</h1>
-            <p className='text-sm pt-2'>
+            <p className='text-sm pt-2 text-stone-500 dark:text-stone-300'>
               You can also pick from these pre made templates. These templates
               are made based on the most reading possibilities you can make on
-              your own and if you can't find one, you can make your own
+              your own and if you can't find one, you can make your own.
             </p>
 
             <div>

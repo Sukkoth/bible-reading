@@ -103,17 +103,9 @@ function Home() {
                 const progress = dailyData?.[0]?.items?.filter(
                   (daily: ScheduleItem) => daily.status === "COMPLETED"
                 ).length;
-
-                if (index === 25) {
-                  console.log({
-                    dailyData,
-                    target,
-                    progress,
-                    index: index + 1,
-                  });
-                }
                 return (
                   <CalendarStatItem
+                    rangeColor
                     target={target}
                     progress={progress}
                     type='h'
@@ -165,7 +157,7 @@ function Home() {
 
 export default Home;
 
-function HomeLoader() {
+export function HomeLoader() {
   return (
     <div>
       <div className='flex justify-between mt-5'>

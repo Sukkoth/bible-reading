@@ -17,6 +17,18 @@ import { format } from "date-fns";
 import { useCallback, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 function Plan() {
   const [, setRenderOnPlanItemUpdate] = useState(false);
   const { planId } = useParams();
@@ -121,11 +133,32 @@ function Plan() {
           />
           <Separator className='my-5' />
 
-          <div className='w-full'>
-            <Button variant='destructive' size='lg' className='w-full'>
-              Delete Plan
-            </Button>
-          </div>
+          <AlertDialog>
+            <AlertDialogTrigger className='w-full'>
+              <Button variant='destructive' size='lg' className='w-full'>
+                Delete Plan
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  By continuing, you delete your{" "}
+                  <strong className='text-red-500'>plan</strong> and it's
+                  <strong className='text-red-500'> progress</strong>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {}}
+                  className='bg-red-700 hover:bg-red-600'
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardContent>
       </Card>
     </div>

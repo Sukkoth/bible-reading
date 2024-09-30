@@ -14,7 +14,7 @@ function PlansItem({ target, progress, type, text, subText, to }: Props) {
   return (
     <Link
       to={to}
-      className='border my-3 border-stone-700 hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
+      className='border my-3 border-border hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
     >
       <div className='w-16 me-5 flex justify-center'>
         <CalendarStatItem

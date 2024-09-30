@@ -20,7 +20,7 @@ function NewPlanItem({
   return (
     <Link
       to={`/plans/create/schedule/${queryParam}`}
-      className='border my-3 border-stone-700 hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
+      className='border my-3 border-stone-200 dark:border-stone-700 hover:bg-secondary cursor-pointer px-2 py-2 rounded-xl flex items-center'
     >
       <img
         src='https://hips.hearstapps.com/hmg-prod/images/an-open-bible-royalty-free-image-1681152546.jpg?resize=1200:*'
