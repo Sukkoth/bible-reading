@@ -18,7 +18,6 @@ import supabase from "@/supabase";
 import { useLogin } from "@/react-query/mutations";
 import { useEffect } from "react";
 import { useAuth } from "@/Providers/AuthProvider";
-import { Skeleton } from "@/components/ui/skeleton";
 
 function Login() {
   const navigate = useNavigate();
@@ -154,7 +153,7 @@ function Login() {
       </Card>
       <p className='pt-5 text-sm'>
         Don't have an account?{" "}
-        <Link to='/register' className='text-primary hover:underline'>
+        <Link to='/register' className='text-primary underline'>
           Register
         </Link>
       </p>
@@ -163,40 +162,3 @@ function Login() {
 }
 
 export default Login;
-
-export function AuthLoader() {
-  return (
-    <div className='flex flex-col h-full flex-grow items-center justify-center'>
-      <Card className='w-full bg-transparent'>
-        <CardHeader>
-          <Skeleton className='h-14' />
-          <Skeleton className='h-4 mt-3' />
-        </CardHeader>
-        <CardContent>
-          <div>
-            <Skeleton className='h-4 w-1/2' />
-            <Skeleton className='h-12 mt-3' />
-          </div>
-          <div className='mt-5'>
-            <Skeleton className='h-4 w-1/2' />
-            <Skeleton className='h-12 mt-3' />
-          </div>
-          <Skeleton className='float-end w-1/2 h-4 mt-6' />
-          <Skeleton className='h-14 mt-16' />
-        </CardContent>
-      </Card>
-      <Card className='w-full bg-transparent mt-10'>
-        <CardHeader>
-          <Skeleton className='h-4 mx-5' />
-        </CardHeader>
-        <CardContent>
-          <Skeleton className='h-12' />
-        </CardContent>
-      </Card>
-
-      <div className='w-full px-10'>
-        <Skeleton className='h-4 w-full mt-7' />
-      </div>
-    </div>
-  );
-}

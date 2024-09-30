@@ -6,7 +6,6 @@ import { FiBookOpen } from "react-icons/fi";
 import { BsCalendar4Week } from "react-icons/bs";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import PlanDetailItem from "@/components/PlanDetailItem";
 import { TbCategory } from "react-icons/tb";
 import PlanCalendarView from "@/components/PlanCalendarView";
@@ -15,7 +14,6 @@ import { useGetPlanSchedule } from "@/react-query/queries";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { useCallback, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   AlertDialog,
@@ -28,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import PlanLoader from "@/loaders/PlanLoader";
 
 function Plan() {
   const [, setRenderOnPlanItemUpdate] = useState(false);
@@ -135,9 +134,9 @@ function Plan() {
 
           <AlertDialog>
             <AlertDialogTrigger className='w-full'>
-              <Button variant='destructive' size='lg' className='w-full'>
+              <div className='w-full bg-destructive h-12 rounded-md px-8 flex items-center justify-center text-sm hover:bg-destructive/90'>
                 Delete Plan
-              </Button>
+              </div>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -152,7 +151,7 @@ function Plan() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => {}}
-                  className='bg-red-700 hover:bg-red-600'
+                  className='bg-destructive hover:bg-destructive/90'
                 >
                   Continue
                 </AlertDialogAction>
@@ -161,51 +160,6 @@ function Plan() {
           </AlertDialog>
         </CardContent>
       </Card>
-    </div>
-  );
-}
-
-export function PlanLoader() {
-  return (
-    <div>
-      <Skeleton className='size-10' />
-      <div className='pt-5'>
-        <Skeleton className='w-1/3 h-12' />
-      </div>
-      <div className='mt-6 min-h-[75dvh] border rounded-2xl p-5 px-3 sm:px-6 bg-card'>
-        <Skeleton className='size-40 mx-auto rounded-full full' />
-        <div className='mt-6 grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 gap-2'>
-          <Skeleton className='h-24' />
-          <Skeleton className='h-24' />
-          <Skeleton className='h-24' />
-          <Skeleton className='h-24' />
-          <Skeleton className='h-24' />
-          <Skeleton className='h-24' />
-        </div>
-        <Separator className='my-5' />
-        <div>
-          <div className='flex gap-[2px] cursor-pointer'>
-            <Skeleton className='w-1/4 h-32 rounded-none border border-stone-300 dark:border-stone-600' />
-            <Skeleton className='w-1/4 h-32 rounded-none border' />
-            <Skeleton className='w-1/4 h-32 rounded-none border' />
-            <Skeleton className='w-1/4 h-32 rounded-none border' />
-          </div>
-        </div>
-        <Separator className='my-5' />
-        <div className='space-y-3'>
-          <div className='flex gap-2'>
-            <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
-          </div>
-          <div className='flex gap-2'>
-            <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
-          </div>
-          <div className='flex gap-2'>
-            <Skeleton className='size-4' /> <Skeleton className='w-1/2 h-4' />
-          </div>
-        </div>
-        <Separator className='my-5' />
-        <Skeleton className='w-full h-12 mt-2' />
-      </div>
     </div>
   );
 }

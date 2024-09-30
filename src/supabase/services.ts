@@ -71,7 +71,7 @@ export async function UPDATE_PROFILE(
     .select()
     .single();
 
-  if (error || !data.length) {
+  if (error) {
     throw new Error(error?.message || "Something went wrong");
   }
 

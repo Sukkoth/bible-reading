@@ -12,8 +12,11 @@ import {
   useGetMonthlyPlanStats,
   useGetTodaysPlans,
 } from "@/react-query/queries";
-import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import HomeLoader from "@/loaders/HomeLoader";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator";
 
 function Home() {
   const navigate = useNavigate();
@@ -116,13 +119,14 @@ function Home() {
               }
             )}
           </div>
-          <p className='pt-2'>
+          {/* <p className='pt-2'>
             <span className='text-primary'>+3.2%</span> from last month
-          </p>
+          </p> */}
         </div>
         <div className='mt-10'>
           <div className='w-full flex justify-between items-center'>
             <h1 className='text-sm xxs:text-xl xs:text-2xl'>Today's plans</h1>
+
             <Link
               to='plans'
               className='text-stone-400 text-xs hover:underline cursor-pointer'
@@ -130,25 +134,31 @@ function Home() {
               View all
             </Link>
           </div>
-          {todaysPlans.data?.length
-            ? todaysPlans.data.map((plan) => {
-                const target = plan.schedules[0].items.length;
-                const progress = plan.schedules[0].items.filter(
-                  (item) => item.status === "COMPLETED"
-                ).length;
-                return (
-                  <PlansItem
-                    key={plan.id}
-                    target={target}
-                    progress={progress}
-                    type='Chapters'
-                    text={plan.plans.name}
-                    subText={`${progress}/${target} Chapters`}
-                    to={`/plans/${plan.id}`}
-                  />
-                );
-              })
-            : "You got no plans for today"}
+          {todaysPlans.data?.length ? (
+            todaysPlans.data.map((plan) => {
+              const target = plan.schedules[0].items.length;
+              const progress = plan.schedules[0].items.filter(
+                (item) => item.status === "COMPLETED"
+              ).length;
+              return (
+                <PlansItem
+                  key={plan.id}
+                  target={target}
+                  progress={progress}
+                  type='Chapters'
+                  text={plan.plans.name}
+                  subText={`${progress}/${target} Chapters`}
+                  to={`/plans/${plan.id}`}
+                />
+              );
+            })
+          ) : (
+            <Alert className='mt-5 shadow-md'>
+              <ExclamationTriangleIcon className='h-4 w-4 animate-pulse' />
+              <AlertTitle className='font-bold'>No plans</AlertTitle>
+              <AlertDescription>You got no plans for today</AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </div>
@@ -156,44 +166,3 @@ function Home() {
 }
 
 export default Home;
-
-export function HomeLoader() {
-  return (
-    <div>
-      <div className='flex justify-between mt-5'>
-        <div className='w-full'>
-          <Skeleton className='w-1/2 h-20' />
-          <Skeleton className='w-1/2 h-2 mt-1' />
-        </div>
-        <div>
-          <Skeleton className='size-10' />
-        </div>
-      </div>
-      <div className='mt-5 space-y-2'>
-        <Skeleton className='w-full h-10 rounded-3xl' />
-        <Skeleton className='w-full h-10 rounded-3xl' />
-      </div>
-      <div className='mt-12'>
-        <Skeleton className='w-1/2 h-8' />
-        <div className='grid grid-cols-4 xxs:grid-cols-6 xs:grid-cols-8 gap-2 pt-2'>
-          {Array.from({ length: 30 }, (_, index) => (
-            <Skeleton
-              className='size-[45px] sm:size-[53px] rounded-full'
-              key={index}
-            />
-          ))}
-        </div>
-      </div>
-      <div className='mt-12'>
-        <div className='pt-2 flex justify-between items-end'>
-          <Skeleton className='w-1/3 h-8' />
-          <Skeleton className='w-20 h-5 mt-3' />
-        </div>
-        <div className=''>
-          <Skeleton className='my-3 h-16 rounded-xl border' />
-          <Skeleton className='my-3 h-16 rounded-xl border' />
-        </div>
-      </div>
-    </div>
-  );
-}

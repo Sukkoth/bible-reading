@@ -108,7 +108,7 @@ function Register() {
       </Card>
       <p className='pt-5 text-sm'>
         Already have an account?{" "}
-        <Link to='/Login' className='text-primary hover:underline'>
+        <Link to='/Login' className='text-primary underline'>
           Login
         </Link>
       </p>
