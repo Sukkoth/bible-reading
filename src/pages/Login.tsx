@@ -153,7 +153,7 @@ function Login() {
       </Card>
       <p className='pt-5 text-sm'>
         Don't have an account?{" "}
-        <Link to='/register' className='text-primary hover:underline'>
+        <Link to='/register' className='text-primary underline'>
           Register
         </Link>
       </p>
