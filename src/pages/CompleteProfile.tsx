@@ -21,7 +21,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { BiLoader } from "react-icons/bi";
 
 export default function CompleteProfile() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [, setGender] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false); //for file

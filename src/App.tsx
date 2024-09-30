@@ -1,20 +1,12 @@
-import { Route, Routes } from "react-router-dom";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import NotFound from "@/pages/NotFound";
 import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import AppRoutes from "@/routes";
+import NotFound from "@/pages/NotFound";
 import MainLayout from "@/components/Layouts/MainLayout";
-import Home from "@/pages/Home";
-import Plans from "@/pages/Plans";
-import Plan from "@/pages/Plan";
-import PopularPlans from "@/pages/NewPlan";
-import CompleteProfile from "@/pages/CompleteProfile";
 import AuthLayout from "@/components/Layouts/AuthLayout";
-import { useGetUser } from "./react-query/queries";
-import { useAuth } from "./Providers/AuthProvider";
-import MainLoader from "./components/Loaders/MainLoader";
-import CreatePlan from "./pages/CreatePlan";
-import CreatePlanSchedule from "./pages/CreatePlanSchedule";
+import { useGetUser } from "@/react-query/queries";
+import { useAuth } from "@/Providers/AuthProvider";
+import MainLoader from "@/components/Loaders/MainLoader";
 
 function App() {
   const { data, isPending } = useGetUser();
@@ -33,23 +25,26 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path='login' element={<AppRoutes.auth.login />} />
+        <Route path='register' element={<AppRoutes.auth.register />} />
         <Route element={<AuthLayout />}>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<AppRoutes.home.index />} />
           <Route path='/plans'>
-            <Route index element={<Plans />} />
-            <Route path=':planId' element={<Plan />} />
-            <Route path='popular' element={<PopularPlans />} />
-            <Route path='create' element={<CreatePlan />} />
+            <Route index element={<AppRoutes.plans.index />} />
+            <Route path=':planId' element={<AppRoutes.plans.plan />} />
+            <Route path='popular' element={<AppRoutes.plans.popular />} />
+            <Route path='create' element={<AppRoutes.plans.createPlan />} />
             <Route
               path='create/schedule/:planId'
-              element={<CreatePlanSchedule />}
+              element={<AppRoutes.plans.createSchedule />}
             />
           </Route>
-          <Route path='/complete-profile' element={<CompleteProfile />} />
+          <Route
+            path='/complete-profile'
+            element={<AppRoutes.auth.completeProfile />}
+          />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Route>
     </Routes>
   );
