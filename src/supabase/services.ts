@@ -240,7 +240,7 @@ export async function GET_CURRENT_MONTH_DAILY_PROGRESS(userId: string) {
     .eq("userId", userId)
     .filter(
       "schedules.date",
-      "gte",
+      "gt",
       new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
     )
     .filter(
