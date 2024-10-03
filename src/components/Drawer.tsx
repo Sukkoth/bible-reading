@@ -1,7 +1,6 @@
 import { useLogout } from "@/react-query/mutations";
 import { BiBook, BiLogOut } from "react-icons/bi";
-import { CgClose, CgProfile } from "react-icons/cg";
-import { IoSettings } from "react-icons/io5";
+import { CgClose } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import {
   AlertDialog,

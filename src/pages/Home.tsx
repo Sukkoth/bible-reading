@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import HomeLoader from "@/loaders/HomeLoader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Separator } from "@/components/ui/separator";
 
 function Home() {
   const navigate = useNavigate();
